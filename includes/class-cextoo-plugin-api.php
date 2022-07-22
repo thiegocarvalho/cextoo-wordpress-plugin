@@ -1,7 +1,10 @@
 <?php
 
 class Cextoo_API{
-    public function create_customer($data): bool
+	/**
+	 * @throws Exception
+	 */
+	public function create_customer($data): bool
     {
          $password = wp_generate_password( 6, false );
          $user_data = $this->format_wp_user($data, $password);
@@ -12,25 +15,26 @@ class Cextoo_API{
              }
              return true;
          }
-        $this->send_notification_wellcome_email($user_data, $user_id);
         return false;
     }
 	
 	
 	public function remove_customer($data): bool
     {
-	$user =	get_user_by( 'email', $data['user_email'] );
-      
-         if($user){
+	    if(!email_exists($data['user_email'])){
+			$user =	get_user_by( 'email', $data['user_email'] );
             wp_delete_user($user->ID);
-		 return true;
+			return true;
          }
-        
         return false;
     }
-	
-	private function generatePasswordLink($user_id)
-	{
+
+	/**
+	 * @param $user_id
+	 *
+	 * @return string
+	 */
+	private function generate_password_link($user_id){
 		$user = new WP_User( (int) $user_id );
 		$reset_key = get_password_reset_key( $user );
 		$user_login = $user->user_login;
@@ -51,7 +55,7 @@ class Cextoo_API{
             $render =  $engine->render(
                 $template,
                 [
-                    'password' => $this->generatePasswordLink($user_id),
+                    'password' => $this->generate_password_link($user_id),
                     'email' => $user_data['user_email']
                 ]
             );
@@ -130,8 +134,6 @@ class Cextoo_API{
 				throw new Exception('What Day is Today?');
 			}
 
-
-
 			switch ( $data['event'] ) {
 				case 'CREATE_RULE':
 					return new WP_REST_Response(
@@ -141,6 +143,11 @@ class Cextoo_API{
 				case 'CREATE_CUSTOMER':
 					return new WP_REST_Response(
 						$this->create_customer( $data['body'] )
+					);
+					break;
+				case 'REMOVE_CUSTOMER':
+					return new WP_REST_Response(
+						$this->remove_customer( $data['body'] )
 					);
 					break;
 				case 'ADD_CUSTOMER_ROLE':
