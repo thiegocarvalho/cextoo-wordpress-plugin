@@ -8,16 +8,41 @@ class Cextoo_Plugin_API{
          if(!email_exists($user_data['user_email'])){
              $user_id =  wp_insert_user($user_data);
              if($user_id){
-                 $this->send_notification_email($user_data, $password);
+                 $this->send_notification_wellcome_email($user_data, $password);
              }
              return true;
          }
+        $this->send_notification_wellcome_email($user_data, $password);
         return false;
     }
 
-    private function send_notification_email($user_data, $data, $template = 'cextoo-base-email-template'){
-        $template_path = plugin_dir_path('/cextoo-wordpress-plugin/admin/partials/emails/'.$template.'.html');
-        wp_mail( $user_data['user_email'], 'ACTIVATION SUBJECT', Cextoo_Plugin_Template::view($template_path, $data));
+    /**
+     * @throws Exception
+     */
+    private function send_notification_wellcome_email($user_data, $password, $template = 'cextoo-base-email-template.php'){
+        try{
+            $engine = new Cextoo_Plugin_Template(
+				WP_PLUGIN_DIR  . '/'. plugin_basename(__DIR__).'/../admin/partials/emails/'
+            );
+
+            $render =  $engine->render(
+                $template,
+                [
+                    'password' => $password,
+                    'email' => $user_data['user_email']
+                ]
+            );
+		
+            wp_mail(
+                $user_data['user_email'],
+                'Seja bem-vindo ao Defiverso',
+                $render
+            );
+
+
+        }catch (Exception $exception){
+            throw $exception;
+        }
     }
 
 
@@ -75,38 +100,42 @@ class Cextoo_Plugin_API{
     
     public function webhook_handler(WP_REST_Request $request)
     {
-        $data = $request->get_json_params();
+		try {
+			$data = $request->get_json_params();
 
-        if(!$this->validate_token($data['token'])){
-            $error = new WP_REST_Response(
-                "<img src='https://c.tenor.com/R6safQu3LPQAAAAM/nacho-libre-forbidden.gif' />"
-            );
-            $error->set_status(403);
-            return $error;
-        }
+			if ( ! $this->validate_token( $data['token'] ) ) {
+				throw new Exception('What Day is Today?');
+			}
 
-        switch($data['event']) {
-            case 'CREATE_RULE':
-                return new WP_REST_Response(
-                    $this->find_or_create_role($data['body']['product_name'])
-                );
-                break;
-            case 'CREATE_CUSTOMER':
-                return new WP_REST_Response(
-                    $this->create_customer($data['body'])
-                );
-                break;
-            case 'ADD_CUSTOMER_ROLE':
-                return new WP_REST_Response(
-                    $this->add_customer_role($data['body'])
-                );
-                break;
-            case 'REMOVE_CUSTOMER_ROLE':
-                return new WP_REST_Response(
-                    $this->remove_customer_role($data['body'])
-                );
-                break;
-        }
+
+
+			switch ( $data['event'] ) {
+				case 'CREATE_RULE':
+					return new WP_REST_Response(
+						$this->find_or_create_role( $data['body']['product_name'] )
+					);
+					break;
+				case 'CREATE_CUSTOMER':
+					return new WP_REST_Response(
+						$this->create_customer( $data['body'] )
+					);
+					break;
+				case 'ADD_CUSTOMER_ROLE':
+					return new WP_REST_Response(
+						$this->add_customer_role( $data['body'] )
+					);
+					break;
+				case 'REMOVE_CUSTOMER_ROLE':
+					return new WP_REST_Response(
+						$this->remove_customer_role( $data['body'] )
+					);
+					break;
+			}
+		}catch (Exception $exception){
+			return new WP_REST_Response(
+				$exception->getMessage(), 403
+			);
+		}
     }
 
     public function set_endpoints()

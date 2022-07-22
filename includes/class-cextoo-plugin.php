@@ -65,6 +65,7 @@ class Cextoo_Plugin {
 		$this->load_dependencies();
 		$this->set_locale();
         $this->set_api();
+		$this->set_email_type();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
@@ -96,6 +97,8 @@ class Cextoo_Plugin {
 
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cextoo-plugin-api.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cextoo-plugin-template.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-cextoo-plugin-admin.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-cextoo-plugin-public.php';
@@ -119,6 +122,15 @@ class Cextoo_Plugin {
 
         $this->loader->add_action( 'rest_api_init', $plugin_api, 'set_endpoints' );
     }
+
+	public function set_email_type_function()
+	{
+		return 'text/html';
+	}
+
+	private function set_email_type() {
+		$this->loader->add_filter( 'wp_mail_content_type', $this, 'set_email_type_function' );
+	}
 
 	private function set_locale() {
 

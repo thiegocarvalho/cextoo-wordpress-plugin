@@ -1,16 +1,6 @@
 <?php
 
 /**
- * Register all actions and filters for the plugin
- *
- * @link       https://github.com/thiegocarvalho
- * @since      1.0.0
- *
- * @package    Cextoo_Plugin
- * @subpackage Cextoo_Plugin/includes
- */
-
-/**
  * Register all actions and filters for the plugin.
  *
  * Maintain a list of all hooks that are registered throughout

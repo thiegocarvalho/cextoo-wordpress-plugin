@@ -53,5 +53,4 @@ class Cextoo_Plugin_Activator {
 		dbDelta( $sql );
 
 	}
-
 }
