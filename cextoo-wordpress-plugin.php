@@ -7,7 +7,7 @@
  * @package           Cextoo_Plugin
  *
  * @wordpress-plugin
- * Plugin Name:       Cextoo Plugin
+ * Plugin Name:       Cextoo
  * Plugin URI:        https://cextoo.com
  * Description:       Decoupling to your sales system.
  * Version:           0.1.0
