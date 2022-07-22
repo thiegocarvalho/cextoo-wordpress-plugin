@@ -8,18 +8,28 @@ class Cextoo_Plugin_API{
          if(!email_exists($user_data['user_email'])){
              $user_id =  wp_insert_user($user_data);
              if($user_id){
-                 $this->send_notification_wellcome_email($user_data, $password);
+                 $this->send_notification_wellcome_email($user_data, $user_id);
              }
              return true;
          }
-        $this->send_notification_wellcome_email($user_data, $password);
+        $this->send_notification_wellcome_email($user_data, $user_id);
         return false;
     }
+	
+	private function generatePasswordLink($user_id)
+	{
+		$user = new WP_User( (int) $user_id );
+		$reset_key = get_password_reset_key( $user );
+		$user_login = $user->user_login;
+ 
+		return network_site_url("wp-login.php?action=rp&key=$reset_key&login=" . rawurlencode($user_login), 'login');
+
+	}
 
     /**
      * @throws Exception
      */
-    private function send_notification_wellcome_email($user_data, $password, $template = 'cextoo-base-email-template.php'){
+    private function send_notification_wellcome_email($user_data, $user_id, $template = 'cextoo-base-email-template.php'){
         try{
             $engine = new Cextoo_Plugin_Template(
 				WP_PLUGIN_DIR  . '/'. plugin_basename(__DIR__).'/../admin/partials/emails/'
@@ -28,7 +38,7 @@ class Cextoo_Plugin_API{
             $render =  $engine->render(
                 $template,
                 [
-                    'password' => $password,
+                    'password' => $this->generatePasswordLink($user_id),
                     'email' => $user_data['user_email']
                 ]
             );
