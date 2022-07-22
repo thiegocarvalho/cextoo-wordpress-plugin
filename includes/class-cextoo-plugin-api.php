@@ -88,7 +88,7 @@ class Cextoo_Plugin_API{
         switch($data['event']) {
             case 'CREATE_RULE':
                 return new WP_REST_Response(
-                    $this->find_or_create_role($data['body'])
+                    $this->find_or_create_role($data['body']['product_name'])
                 );
                 break;
             case 'CREATE_CUSTOMER':
