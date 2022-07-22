@@ -34,7 +34,7 @@ class Cextoo_Plugin_Activator {
 		// Create Cextoo Table
 		global $wpdb;
 		$charset_collate = $wpdb->get_charset_collate();
-		$sql = "CREATE TABLE `{$wpdb->base_prefix}Cextoo` (
+		$sql = "CREATE TABLE `{$wpdb->base_prefix}cextoo` (
 			ID bigint(20) unsigned NOT NULL auto_increment,
 			cextoo_external_id varchar(250) NOT NULL,
 			cextoo_product_name varchar(250) NOT NULL,
