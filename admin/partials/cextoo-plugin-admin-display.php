@@ -16,7 +16,7 @@
         <p><?php esc_html_e( 'Cextoo Token:', 'Cextoo' ); ?></p>
         <form method="post" action="options.php">
             <?php settings_fields( 'cextoo' );?>
-            <input type="text" name="Cextoo_token" value="<?php echo get_option('Cextoo_token')?>" id="Cextoo_token" readonly style="
+            <input type="text" name="cextoo_token" value="<?php echo get_option('cextoo_token')?>" id="cextoo_token" readonly style="
     width: 100%;
 "><br>
             <span onclick="CopyToken()" style="color:#fff;display: inline-block;background-color: #098d34; margin-top:10px;padding: 7px;border-radius: 7px;cursor: pointer;font-weight: 700;">Copy</span>
@@ -52,7 +52,7 @@
         }
 
         function CopyToken() {
-            var copyText = document.getElementById('Cextoo_token')
+            var copyText = document.getElementById('cextoo_token')
             copyText.select();
             document.execCommand('copy')
             alert('Token Copied!')

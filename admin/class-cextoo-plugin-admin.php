@@ -64,7 +64,7 @@ class Cextoo_Plugin_Admin {
 
         register_setting(
             'cextoo', // Option group
-            'Cextoo_token', // Option name
+            'cextoo_token', // Option name
             [ $this, 'generate_token' ]
         );
     }

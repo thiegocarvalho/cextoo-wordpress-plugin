@@ -26,8 +26,8 @@ class Cextoo_Plugin_API{
         $role = $this->find_or_create_role($data['product_name']);
         return [
             'user_pass' =>  $password,
-            'user_login' => $data['email'],
-            'user_email' => $data['email'],
+            'user_login' => $data['user_email'],
+            'user_email' => $data['user_email'],
             'role' => $role
         ];
     }
@@ -70,7 +70,7 @@ class Cextoo_Plugin_API{
     }
 
     private function validate_token($token){
-        return get_option('Cextoo_token') == $token;
+        return get_option('cextoo_token') == $token;
     }
     
     public function webhook_handler(WP_REST_Request $request)
