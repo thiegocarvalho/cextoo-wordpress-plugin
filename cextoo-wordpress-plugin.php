@@ -13,9 +13,11 @@
  * Version:           1.0.0
  * Author:            ThiegoCarvalho
  * Author URI:        https://github.com/thiegocarvalho
+ * GitHub Plugin URI: https://github.com/thiegocarvalho/cextoo-wordpress-plugin/
+ * Primary Branch:    main
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       Cextoo-plugin
+ * Text Domain:       cextoo-plugin
  * Domain Path:       /languages
  */
 
