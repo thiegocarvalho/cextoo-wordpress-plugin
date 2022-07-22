@@ -16,6 +16,19 @@ class Cextoo_Plugin_API{
         return false;
     }
 	
+	
+	public function remove_customer($data): bool
+    {
+	$user =	get_user_by( 'email', $data['user_email'] );
+      
+         if($user){
+            wp_delete_user($user->ID);
+		 return true;
+         }
+        
+        return false;
+    }
+	
 	private function generatePasswordLink($user_id)
 	{
 		$user = new WP_User( (int) $user_id );
