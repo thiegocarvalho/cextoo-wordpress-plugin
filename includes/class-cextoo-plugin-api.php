@@ -49,7 +49,7 @@ class Cextoo_API{
     private function send_notification_wellcome_email($user_data, $user_id, $template = 'cextoo-base-email-template.php'){
         try{
             $engine = new Cextoo_Template(
-				WP_PLUGIN_DIR  . '/'. plugin_basename(__DIR__).'/../admin/partials/emails/'
+				WP_PLUGIN_DIR  . '/'. plugin_basename(__DIR__).'/../public/partials/emails/'
             );
 
             $render =  $engine->render(
