@@ -1,0 +1,50 @@
+{
+	"name": "thiegocarvalho/cextoo-wordpress-plugin",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-only",
+	"description": "Decoupling sales system",
+	"homepage": "https://github.com/thiegocarvalho/cextoo-wordpress-plugin",
+	"authors": [
+		{
+			"name": "Thiego Carvalho",
+			"email": "thiego@rocketmail.com",
+			"homepage": "https://github.com/thiegocarvalho"
+		}
+	],
+	"keywords": [
+		"wordpress",
+		"sales"
+	],
+	"support": {
+		"issues": "https://github.com/thiegocarvalho/cextoo-wordpress-plugin/issues"
+	},
+	"require": {
+		"composer/installers": "~1.0",
+    "afragen/git-updater": "^9 || ^10",
+	},
+  "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/afragen/git-updater"
+        }
+    ],
+	"require-dev": {
+		"php": ">=7.4",
+	},
+	"autoload-dev": {
+		"classmap": [
+			"wordpress/"
+		]
+	},
+"extra": {
+        "installer-paths": {
+            "wp-content/plugins/{$name}/": [
+                "type:wordpress-plugin"
+            ],
+            "wp-content/themes/{$name}/": [
+                "type:wordpress-theme"
+            ]
+        }
+    }
+}
