@@ -87,7 +87,7 @@
     <tbody>
     <tr>
         <td>
-            <table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-1" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #091548; background-image: url('<?php echo plugin_dir_url( 'cextoo-wordpress-plugin/admin/images/email').'email/'; ?>background_2.png'); background-position: center top; background-repeat: repeat;" width="100%">
+            <table align="center" border="0" cellpadding="0" cellspacing="0" class="row row-1" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #091548; background-image: url('<?php echo plugin_dir_url( 'cextoo-wordpress-plugin/public/images/email').'email/'; ?>background_2.png'); background-position: center top; background-repeat: repeat;" width="100%">
                 <tbody>
                 <tr>
                     <td>
@@ -98,7 +98,7 @@
                                     <table border="0" cellpadding="0" cellspacing="0" class="image_block block-2" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
                                         <tr>
                                             <td class="pad" style="width:100%;padding-right:0px;padding-left:0px;padding-top:8px;">
-                                                <div align="center" class="alignment" style="line-height:10px"><img alt="Main Image" src="<?php echo plugin_dir_url( 'cextoo-wordpress-plugin/admin/images/email').'email/'; ?>header3.png" style="display: block; height: auto; border: 0; width: 232px; max-width: 100%;" title="Main Image" width="232"/></div>
+                                                <div align="center" class="alignment" style="line-height:10px"><img alt="Main Image" src="<?php echo plugin_dir_url( 'cextoo-wordpress-plugin/public/images/email').'email/'; ?>header3.png" style="display: block; height: auto; border: 0; width: 232px; max-width: 100%;" title="Main Image" width="232"/></div>
                                             </td>
                                         </tr>
                                     </table>
@@ -159,7 +159,7 @@
                                     <table border="0" cellpadding="5" cellspacing="0" class="image_block block-1" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
                                         <tr>
                                             <td class="pad">
-                                                <div align="center" class="alignment" style="line-height:10px"><img alt="Defiverso" src="<?php echo plugin_dir_url( 'cextoo-wordpress-plugin/admin/images/email').'email/'; ?>logo.png" style="display: block; height: auto; border: 0; width: 145px; max-width: 100%;" title="Your Logo" width="145"/></div>
+                                                <div align="center" class="alignment" style="line-height:10px"><img alt="Defiverso" src="<?php echo plugin_dir_url( 'cextoo-wordpress-plugin/public/images/email').'email/'; ?>logo.png" style="display: block; height: auto; border: 0; width: 145px; max-width: 100%;" title="Your Logo" width="145"/></div>
                                             </td>
                                         </tr>
                                     </table>

@@ -1,5 +1,5 @@
 <?php
-class Cextoo_Plugin_Template {
+class Cextoo_Template {
 
     /**
      * @var string

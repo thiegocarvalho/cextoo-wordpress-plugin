@@ -1,6 +1,6 @@
 <?php
 
-class Cextoo_Plugin_Database{
+class Cextoo_Database{
 
 	protected int $ID;
 	protected string $Cextoo_external_id;

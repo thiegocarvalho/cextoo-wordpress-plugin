@@ -1,6 +1,6 @@
 <?php
 
-class Cextoo_Plugin_API{
+class Cextoo_API{
     public function create_customer($data): bool
     {
          $password = wp_generate_password( 6, false );
@@ -44,7 +44,7 @@ class Cextoo_Plugin_API{
      */
     private function send_notification_wellcome_email($user_data, $user_id, $template = 'cextoo-base-email-template.php'){
         try{
-            $engine = new Cextoo_Plugin_Template(
+            $engine = new Cextoo_Template(
 				WP_PLUGIN_DIR  . '/'. plugin_basename(__DIR__).'/../admin/partials/emails/'
             );
 

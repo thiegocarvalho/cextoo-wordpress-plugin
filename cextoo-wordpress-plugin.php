@@ -4,7 +4,7 @@
  *
  * @link              https://github.com/thiegocarvalho
  * @since             1.0.0
- * @package           Cextoo_Plugin
+ * @package           Cextoo
  *
  * @wordpress-plugin
  * Plugin Name:       Cextoo
@@ -29,20 +29,20 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Currently plugin version.
  */
-define( 'Cextoo_PLUGIN_VERSION', '1.0.0' );
+define( 'CEXTOO_VERSION', '0.1.0' );
 
-function activate_Cextoo_plugin() {
+function activate_cextoo_plugin() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-cextoo-plugin-activator.php';
-	Cextoo_Plugin_Activator::activate();
+	Cextoo_Activator::activate();
 }
 
 /**
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-cextoo-plugin-deactivator.php
  */
-function deactivate_Cextoo_plugin() {
+function deactivate_cextoo_plugin() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-cextoo-plugin-deactivator.php';
-	Cextoo_Plugin_Deactivator::deactivate();
+	Cextoo_Deactivator::deactivate();
 }
 
 register_activation_hook( __FILE__, 'activate_cextoo_plugin' );
@@ -61,11 +61,11 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-cextoo-plugin.php';
  * then kicking off the plugin from this point in the file does
  * not affect the page life cycle.
  *
- * @since    1.0.0
+ * @since    0.1.0
  */
 function run_cextoo_plugin() {
 
-	$plugin = new Cextoo_Plugin();
+	$plugin = new Cextoo();
 	$plugin->run();
 
 }

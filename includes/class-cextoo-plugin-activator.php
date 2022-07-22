@@ -20,14 +20,14 @@
  * @subpackage Cextoo_Plugin/includes
  * @author     ThiegoCarvalho <carvalho.thiego@gmail.com>
  */
-class Cextoo_Plugin_Activator {
+class Cextoo_Activator {
 
 	/**
 	 * Short Description. (use period)
 	 *
 	 * Long Description.
 	 *
-	 * @since    1.0.0
+	 * @since    0.1.0
 	 */
 	public static function activate() {
 
