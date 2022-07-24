@@ -14,6 +14,8 @@ class Cextoo_API{
                  $this->send_notification_wellcome_email($user_data, $user_id);
              }
              return true;
+         }else{
+             $this->add_customer_role($user_data);
          }
         return false;
     }
@@ -38,8 +40,7 @@ class Cextoo_API{
 		$user = new WP_User( (int) $user_id );
 		$reset_key = get_password_reset_key( $user );
 		$user_login = $user->user_login;
- 
-		return network_site_url("wp-login.php?action=rp&key=$reset_key&login=" . rawurlencode($user_login), 'login');
+		return wp_login_url( get_permalink()) . "?action=rp&key=$reset_key&login=" . rawurlencode($user_login);
 
 	}
 
@@ -55,7 +56,7 @@ class Cextoo_API{
             $render =  $engine->render(
                 $template,
                 [
-                    'password' => $this->generate_password_link($user_id),
+                    'link' => $this->generate_password_link($user_id),
                     'email' => $user_data['user_email']
                 ]
             );
