@@ -73,7 +73,7 @@ class Cextoo_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/Cextoo-plugin-public.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/cextoo-plugin-public.css', array(), $this->version, 'all' );
 
 	}
 
