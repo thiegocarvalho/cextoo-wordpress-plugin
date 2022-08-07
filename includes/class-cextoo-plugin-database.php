@@ -20,7 +20,7 @@ class Cextoo_Database{
         
 	}
 
-	private function set($data){
+	public function set($data){
 		foreach ($data as $key => $value){
             $function = 'set'.ucfirst($key);
             if (function_exists($this->$function)) {
@@ -36,7 +36,9 @@ class Cextoo_Database{
 		);
 		if($database_result){
 			$this->set($database_result);
+            return true;
 		}
+        return false;
 	}
 
     private function uptdateRenewCount()
@@ -54,7 +56,7 @@ class Cextoo_Database{
             throw new Exception("Dear friend, I can't do this...");
          }else{
             global $wpdb;
-		    $this->update_timestamp();
+		    $this->updateTimestamp();
             $this->uptdateRenewCount();
 			$wpdb->update($wpdb->base_prefix.'cextoo',[
                     'status' => $this->getStatus(),
@@ -74,7 +76,8 @@ class Cextoo_Database{
            throw new Exception("Dear friend, I can't do this...");
         }else{
             global $wpdb;
-            $this->update_timestamp();       
+            $this->updateTimestamp();
+            $this->uptdateRenewCount();    
             $wpdb->insert($wpdb->base_prefix.'cextoo', [
                     'external_id' => $this->getExternalId(),	
                     'product_name' => $this->getProductName(),
@@ -90,7 +93,7 @@ class Cextoo_Database{
         }
 	}
 
-	private function update_timestamp()
+	private function updateTimestamp()
     {
 		$this->updated_at = date("Y-m-d H:i:s");
 		if(!$this->getCreatedAt()){
@@ -235,11 +238,18 @@ class Cextoo_Database{
     }
 
     /**
-     * @param int $user_id
+     * @param $param
      */
-    public function setUserId(int $user_id): void
+    public function setUserId($param): void
     {
-        $this->user_id = $user_id;
+        if(is_int($param)){
+            $this->user_id = $param;
+        }else{
+            $user = get_user_by('email', $param);
+            if($user){
+                $this->user_id = $user->ID;
+            }
+        }
     }
 
     /**

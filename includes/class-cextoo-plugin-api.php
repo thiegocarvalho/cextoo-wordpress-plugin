@@ -127,9 +127,17 @@ class Cextoo_API{
     private function subscription_handler($data){
         $database = new Cextoo_Database();
         if($database->get($data['external_id'])){
+            $database->set($data);
             $database->update();
         }else{
+            $database->set($data);
             $database->create();
+        }
+
+        if($data['status'] == 1){
+            $this->add_customer_role($data['product_name']);
+        }else{
+            $this->remove_customer_role($data['product_name']);
         }
     }
     
