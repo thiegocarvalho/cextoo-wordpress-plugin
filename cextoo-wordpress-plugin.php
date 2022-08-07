@@ -10,7 +10,7 @@
  * Plugin Name:       Cextoo
  * Plugin URI:        https://cextoo.com
  * Description:       Decoupling to your sales system.
- * Version:           0.1.0
+ * Version:           0.1.1
  * Author:            ThiegoCarvalho
  * Author URI:        https://github.com/thiegocarvalho
  * GitHub Plugin URI: https://github.com/thiegocarvalho/cextoo-wordpress-plugin/

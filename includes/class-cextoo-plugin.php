@@ -213,7 +213,4 @@ class Cextoo {
 	public function get_version() {
 		return $this->version;
 	}
-
-
-
 }
