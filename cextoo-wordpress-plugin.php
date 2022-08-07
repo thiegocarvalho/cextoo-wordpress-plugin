@@ -3,7 +3,7 @@
 /**
  *
  * @link              https://github.com/thiegocarvalho
- * @since             1.0.0
+ * @since             0.1.0
  * @package           Cextoo
  *
  * @wordpress-plugin
@@ -29,7 +29,7 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Currently plugin version.
  */
-define( 'CEXTOO_VERSION', '0.1.0' );
+define( 'CEXTOO_VERSION', '0.1.1' );
 
 function activate_cextoo_plugin() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-cextoo-plugin-activator.php';

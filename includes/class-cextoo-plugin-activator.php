@@ -31,6 +31,7 @@ class Cextoo_Activator {
 	 */
 	public static function activate() {
 
+		//TODO: Verify if the table exists and if not, create it.
 		// Create Cextoo Table
 		global $wpdb;
 		$charset_collate = $wpdb->get_charset_collate();
