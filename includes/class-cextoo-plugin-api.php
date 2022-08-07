@@ -135,9 +135,9 @@ class Cextoo_API{
         }
 
         if($data['status'] == 1){
-            $this->add_customer_role($data['product_name']);
+            $this->add_customer_role($data);
         }else{
-            $this->remove_customer_role($data['product_name']);
+            $this->remove_customer_role($data);
         }
     }
     
