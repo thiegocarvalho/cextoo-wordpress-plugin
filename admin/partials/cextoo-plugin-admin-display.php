@@ -32,11 +32,11 @@
         <a href="#" class="btn btn-primary">Support</a>
         </div>
         <hr>
-        <img class="card-img-top" src="<?php echo  plugins_url( 'cextoo-wordpress-plugin/admin/images/cextoo-logo.png' )?>" alt="Cextoo" style="
-    padding-top: 40px;
-    display: block;
-    margin: auto;
-">
+        <img class="card-img-top" src="<?php echo plugins_url('images/cextoo-logo.png' , dirname(__FILE__)) ?>" alt="Cextoo" style="
+            padding-top: 40px;
+            display: block;
+            margin: auto;
+        ">
 
     </div>
 </div>
