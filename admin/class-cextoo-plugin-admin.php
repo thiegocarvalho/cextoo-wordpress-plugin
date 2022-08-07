@@ -82,7 +82,7 @@ class Cextoo_Admin {
             'manage_options',
             'cextoo',
             [$this, 'render_admin_page'],
-            plugins_url( 'cextoo-wordpress-plugin/admin/images/cextoo-icon.png' ),
+            plugins_url( plugin_dir_url( __FILE__ ) . 'admin/images/cextoo-icon.png' ),
             99
         );
     }
