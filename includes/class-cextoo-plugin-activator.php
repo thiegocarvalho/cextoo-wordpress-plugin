@@ -46,7 +46,7 @@ class Cextoo_Activator {
 			expires_at datetime NULL,
 			user_id bigint(20) UNSIGNED NOT NULL,
 			created_at datetime NOT NULL,
-			update_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
 			PRIMARY KEY  (ID)
 		  ) $charset_collate;";
 
