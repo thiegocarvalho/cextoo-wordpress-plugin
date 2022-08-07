@@ -73,8 +73,6 @@ class Cextoo_API{
         }
     }
 
-
-
     private function format_wp_user($data, $password){
         $role = $this->find_or_create_role($data['product_name']);
         return [
@@ -125,6 +123,15 @@ class Cextoo_API{
     private function validate_token($token){
         return get_option('cextoo_token') == $token;
     }
+
+    private function subscription_handler($data){
+        $database = new Cextoo_Database();
+        if($database->get($data['external_id'])){
+            $database->update();
+        }else{
+            $database->create();
+        }
+    }
     
     public function webhook_handler(WP_REST_Request $request)
     {
@@ -161,6 +168,11 @@ class Cextoo_API{
 						$this->remove_customer_role( $data['body'] )
 					);
 					break;
+                case 'SUBSCRIPTION':
+                    return new WP_REST_Response(
+                        $this->subscription_handler( $data['body'] )
+                    );
+                    break;
 			}
 		}catch (Exception $exception){
 			return new WP_REST_Response(

@@ -3,13 +3,13 @@
 class Cextoo_Database{
 
 	protected int $ID;
-	protected string $Cextoo_external_id;
-	protected string $Cextoo_product_name;
-	public int $Cextoo_status;
-	public int $Cextoo_renew_count;
-	public datetime $Cextoo_renew_at;
-	protected datetime $Cextoo_start_at;
-	public datetime $Cextoo_expires_at;
+	protected string $external_id;
+	protected string $product_name;
+	public int $status;
+	public int $renew_count;
+	public datetime $renew_at;
+	protected datetime $start_at;
+	public datetime $expires_at;
 	protected int $user_id;
 	protected datetime $created_at;
 	protected datetime $updated_at;
@@ -17,67 +17,83 @@ class Cextoo_Database{
 
 	public function __construct()
 	{
+        
 	}
-
 
 	private function set($data){
 		foreach ($data as $key => $value){
-				$this->$key = $value;
+            $function = 'set'.ucfirst($key);
+            if (function_exists($this->$function)) {
+                $this->$function($value);
+            }
 		}
 	}
 
 	public function get($external_id){
 		global $wpdb;
 		$database_result = $wpdb->get_row(
-			"SELECT * FROM `{$wpdb->base_prefix}Cextoo` WHERE external_id = `$external_id)` LIMIT 0,1"
+			"SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE external_id = `$external_id)` LIMIT 0,1"
 		);
 		if($database_result){
 			$this->set($database_result);
 		}
 	}
 
+    private function uptdateRenewCount()
+    {
+        if($this->getRenewCount()){
+            $this->setRenewCount($this->getRenewCount() + 1);
+        }else{
+            $this->setRenewCount(1);
+        }
+    }
+
 	public function update(): void
     {
-		global $wpdb;
-		$this->update_timestamp();
-		if ($this->ID) {
-			$wpdb->update( $wpdb->base_prefix.'Cextoo',[
-				'Cextoo_product_name' => $this->Cextoo_product_name,
-				'Cextoo_status' => $this->Cextoo_status,
-				'Cextoo_renew_count' => $this->Cextoo_renew_count,							
-				'Cextoo_renew_at' => $this->Cextoo_renew_at,							
-				'Cextoo_expires_at' => $this->Cextoo_expires_at,
-				'updated_at' => $this->updated_at
-			], [
-					'ID' => $this->ID
-			]
+        if(!$this->getID()){
+            throw new Exception("Dear friend, I can't do this...");
+         }else{
+            global $wpdb;
+		    $this->update_timestamp();
+            $this->uptdateRenewCount();
+			$wpdb->update($wpdb->base_prefix.'cextoo',[
+                    'status' => $this->getStatus(),
+                    'renew_count' => $this->getRenewCount(),							
+                    'renew_at' => $this->getRenewAt(),							
+                    'expires_at' => $this->getExpiresAt(),
+                ], [
+                    'ID' => $this->getID()
+                ]
 			);
-	}
-}
+        }
+    }
 
-	public function create(): void
-    {
-			global $wpdb;
-			$this->update_timestamp();
-			$wpdb->insert($wpdb->base_prefix.'Cextoo', [
-				'Cextoo_external_id' => $this->Cextoo_external_id,
-				'Cextoo_product_name' => $this->Cextoo_product_name,
-				'Cextoo_status' => $this->Cextoo_status,
-				'Cextoo_renew_count' => $this->Cextoo_renew_count,							
-				'Cextoo_renew_at' => $this->Cextoo_renew_at,							
-				'Cextoo_start_at' => $this->Cextoo_start_at,							
-				'Cextoo_expires_at' => $this->Cextoo_expires_at,							
-				'user_id' => $this->user_id,
-				'created_at' => $this->created_at,
-				'updated_at' => $this->updated_at
-			]
-			);
+	public function create()
+    {     
+        if($this->getID()){
+           throw new Exception("Dear friend, I can't do this...");
+        }else{
+            global $wpdb;
+            $this->update_timestamp();       
+            $wpdb->insert($wpdb->base_prefix.'cextoo', [
+                    'external_id' => $this->getExternalId(),	
+                    'product_name' => $this->getProductName(),
+                    'status' => $this->getStatus(),
+                    'renew_count' => $this->getRenewCount(),							
+                    'renew_at' => $this->getRenewAt(),
+                    'start_at' => $this->getStartAt(),								
+                    'expires_at' => $this->getExpiresAt(),
+                    'user_id' => $this->getUserID(),
+                    'created_at' => $this->getCreatedAt(),
+                    'updated_at' => $this->getUpdatedAt()
+                ]);
+        }
 	}
 
-	private function update_timestamp(): void
+	private function update_timestamp()
     {
-		$this->updated_at = date();
-		if(!$this->created_at){
+		$this->updated_at = date("Y-m-d H:i:s");
+		if(!$this->getCreatedAt()){
 			$this->created_at = $this->updated_at;
 		}
 	}
@@ -101,113 +117,113 @@ class Cextoo_Database{
     /**
      * @return string
      */
-    public function getCextooExternalId(): string
+    public function getExternalId(): string
     {
-        return $this->Cextoo_external_id;
+        return $this->external_id;
     }
 
     /**
-     * @param string $Cextoo_external_id
+     * @param string $external_id
      */
-    public function setCextooExternalId(string $Cextoo_external_id): void
+    public function setExternalId(string $external_id): void
     {
-        $this->Cextoo_external_id = $Cextoo_external_id;
+        $this->external_id = $external_id;
     }
 
     /**
      * @return string
      */
-    public function getCextooProductName(): string
+    public function getProductName(): string
     {
-        return $this->Cextoo_product_name;
+        return $this->product_name;
     }
 
     /**
-     * @param string $Cextoo_product_name
+     * @param string $product_name
      */
-    public function setCextooProductName(string $Cextoo_product_name): void
+    public function setProductName(string $product_name): void
     {
-        $this->Cextoo_product_name = $Cextoo_product_name;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCextooStatus(): int
-    {
-        return $this->Cextoo_status;
-    }
-
-    /**
-     * @param int $Cextoo_status
-     */
-    public function setCextooStatus(int $Cextoo_status): void
-    {
-        $this->Cextoo_status = $Cextoo_status;
+        $this->product_name = $product_name;
     }
 
     /**
      * @return int
      */
-    public function getCextooRenewCount(): int
+    public function getStatus(): int
     {
-        return $this->Cextoo_renew_count;
+        return $this->status;
     }
 
     /**
-     * @param int $Cextoo_renew_count
+     * @param int $status
      */
-    public function setCextooRenewCount(int $Cextoo_renew_count): void
+    public function setStatus(int $status): void
     {
-        $this->Cextoo_renew_count = $Cextoo_renew_count;
+        $this->status = $status;
     }
 
     /**
-     * @return datetime
+     * @return int
      */
-    public function getCextooRenewAt(): datetime
+    public function getRenewCount(): int
     {
-        return $this->Cextoo_renew_at;
+        return $this->renew_count;
     }
 
     /**
-     * @param datetime $Cextoo_renew_at
+     * @param int $renew_count
      */
-    public function setCextooRenewAt(datetime $Cextoo_renew_at): void
+    public function setRenewCount(int $renew_count): void
     {
-        $this->Cextoo_renew_at = $Cextoo_renew_at;
-    }
-
-    /**
-     * @return datetime
-     */
-    public function getCextooStartAt(): datetime
-    {
-        return $this->Cextoo_start_at;
-    }
-
-    /**
-     * @param datetime $Cextoo_start_at
-     */
-    public function setCextooStartAt(datetime $Cextoo_start_at): void
-    {
-        $this->Cextoo_start_at = $Cextoo_start_at;
+        $this->renew_count = $renew_count;
     }
 
     /**
      * @return datetime
      */
-    public function getCextooExpiresAt(): datetime
+    public function getRenewAt(): datetime
     {
-        return $this->Cextoo_expires_at;
+        return $this->renew_at;
     }
 
     /**
-     * @param datetime $Cextoo_expires_at
+     * @param datetime $renew_at
      */
-    public function setCextooExpiresAt(datetime $Cextoo_expires_at): void
+    public function setRenewAt(datetime $renew_at): void
     {
-        $this->Cextoo_expires_at = $Cextoo_expires_at;
+        $this->renew_at = $renew_at;
+    }
+
+    /**
+     * @return datetime
+     */
+    public function getStartAt(): datetime
+    {
+        return $this->start_at;
+    }
+
+    /**
+     * @param datetime $start_at
+     */
+    public function setStartAt(datetime $start_at): void
+    {
+        $this->start_at = $start_at;
+    }
+
+    /**
+     * @return datetime
+     */
+    public function getExpiresAt(): datetime
+    {
+        return $this->expires_at;
+    }
+
+    /**
+     * @param datetime $expires_at
+     */
+    public function setExpiresAt(datetime $expires_at): void
+    {
+        $this->expires_at = $expires_at;
     }
 
     /**
@@ -235,28 +251,11 @@ class Cextoo_Database{
     }
 
     /**
-     * @param datetime $created_at
-     */
-    public function setCreatedAt(datetime $created_at): void
-    {
-        $this->created_at = $created_at;
-    }
-
-    /**
      * @return datetime
      */
     public function getUpdatedAt(): datetime
     {
         return $this->updated_at;
     }
-
-    /**
-     * @param datetime $updated_at
-     */
-    public function setUpdatedAt(datetime $updated_at): void
-    {
-        $this->updated_at = $updated_at;
-    }
-
 
 }
