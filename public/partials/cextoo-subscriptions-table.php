@@ -87,7 +87,7 @@
                 'text' => "cancelar",
                 'class' => 'cextoo-button bg-cancel',
                 #TODO mudar para configuração do plugins para setar URL da action
-                'action' => 'https://checkout.defiverso.com/subsciption/' . $subscription->external_id
+                'action' => 'https://checkout.defiverso.com/subscription/' . $subscription->external_id
             ];
         } else {
             $status = 'border-left-color: #999999;';
