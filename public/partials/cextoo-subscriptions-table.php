@@ -1,5 +1,7 @@
-<?php ?>
+<?php
 //TODO criar folha CSS e incluir adquadamente
+?>
+
 <style>
 .cextoo-cards {
     display: grid;
@@ -14,19 +16,18 @@
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-    padding: .5rem;
+    padding: .8rem;
     margin: .5rem;
 }
 
 .cextoo-card-title {
-    font-size: .8rem;
+    font-size: .9rem;
     font-weight: bold;
-    text-align: center;
 }
 
 .cextoo-card-text {
-    text-align: center;
-    font-size: .6rem;
+    color: #383838;
+    font-size: .7rem;
 }
 
 .cextoo-button {
@@ -100,15 +101,23 @@
                 <span><?php echo $status ?></span>
                 <span><?php echo $subscription->product_name ?>
             </p>
-            <p class="cextoo-card-text"><strong>inicio: </strong>
-                <?php echo date("d/m/Y", strtotime($subscription->start_at)) ?></p>
-            <p class="cextoo-card-text">
-                <strong>renovação: </strong><?php echo date("d/m/Y", strtotime($subscription->renew_at)) ?>
+            <p class="cextoo-card-text"><strong>Inicio: </strong>
+                <?php echo date("d/m/Y", strtotime($subscription->start_at)) ?>
             </p>
-            <p class="cextoo-card-text"><strong>cancelamento: </strong>
+
+            <?php if ($subscription->renew_at) : ?>
+            <p class="cextoo-card-text">
+                <strong>Renovação: </strong><?php echo date("d/m/Y", strtotime($subscription->renew_at)) ?>
+            </p>
+            <?php endif; ?>
+
+            <?php if ($subscription->expires_at) : ?>
+            <p class="cextoo-card-text"><strong>Cancelamento: </strong>
                 <?php echo date("d/m/Y", strtotime($subscription->expires_at)) ?>
             </p>
-            <p class="cextoo-card-text">
+            <?php endif; ?>
+
+            <p class="cextoo-card-text" style="text-align: center;">
                 <?php if ($button['action']) : ?>
                 <a href="<?php echo $button['action']; ?>" target="_blank">
                     <button class="<?php echo $button['class']; ?>">
