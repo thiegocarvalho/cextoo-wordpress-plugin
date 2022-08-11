@@ -81,7 +81,7 @@
 </style>
 <div class="cextoo-cards">
     <?php foreach ($subscriptions as $subscription) :
-        if ($subscription->status) {
+        if ($subscription->status && !empty($subscription->renew_at)) {
             $status = 'border-left-color: #90EE90;';
             $button = [
                 'text' => "cancelar",
