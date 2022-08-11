@@ -45,6 +45,14 @@ class Cextoo_Database{
 		}
 	}
 
+    public function get_by_user_id($user_id){
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'cextoo';
+        $sql = "SELECT * FROM $table_name WHERE user_id = $user_id";
+        $result = $wpdb->get_results($sql);
+        return $result;
+    }
+
 	public function get($external_id){
 		global $wpdb;
 		$database_result = $wpdb->get_row(
