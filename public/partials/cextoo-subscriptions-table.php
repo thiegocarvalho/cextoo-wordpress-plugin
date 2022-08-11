@@ -1,4 +1,5 @@
 <?php ?>
+//TODO criar folha CSS e incluir adquadamente
 <style>
 .cextoo-cards {
     display: grid;
@@ -13,13 +14,12 @@
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
     padding: .5rem;
     margin: .5rem;
 }
 
 .cextoo-card-title {
-    font-size: .7rem;
+    font-size: .8rem;
     font-weight: bold;
     text-align: center;
 }
@@ -96,10 +96,10 @@
     ?>
     <div class="cextoo-card">
         <div class="cextoo-card-body">
-            <h5 class="cextoo-card-title">
+            <p class="cextoo-card-title">
                 <span><?php echo $status ?></span>
                 <span><?php echo $subscription->product_name ?>
-            </h5>
+            </p>
             <p class="cextoo-card-text"><strong>inicio: </strong>
                 <?php echo date("d/m/Y", strtotime($subscription->start_at)) ?></p>
             <p class="cextoo-card-text">
