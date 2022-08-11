@@ -58,13 +58,14 @@ class Cextoo {
 		if ( defined( 'CEXTOO_VERSION' ) ) {
 			$this->version = CEXTOO_VERSION;
 		} else {
-			$this->version = '0.1.0';
+			$this->version = '0.1.1';
 		}
 		$this->plugin_name = 'cextoo-plugin';
 
 		$this->load_dependencies();
 		$this->set_locale();
         $this->set_api();
+		$this->set_shortcodes();
 		$this->set_email_type();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
@@ -97,6 +98,8 @@ class Cextoo {
 
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cextoo-plugin-api.php';
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cextoo-plugin-shortcode.php';
+
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cextoo-plugin-template.php';
 
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-cextoo-plugin-admin.php';
@@ -122,6 +125,12 @@ class Cextoo {
 
         $this->loader->add_action( 'rest_api_init', $plugin_api, 'set_endpoints' );
     }
+
+	private function set_shortcodes() {
+		$plugin_shortcode = new Cextoo_Shortcode();
+
+		$this->loader->add_action( 'init', $plugin_shortcode, 'register_shortcodes' );
+	}
 
 	public function set_email_type_function()
 	{
