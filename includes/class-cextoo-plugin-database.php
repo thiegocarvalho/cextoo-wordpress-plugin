@@ -1,22 +1,23 @@
 <?php
 
-class Cextoo_Database{
+class Cextoo_Database
+{
 
-	protected int $ID;
-	protected string $external_id;
-	protected string $product_name;
-	public int $status;
-	public int $renew_count;
-	public string $renew_at;
-	protected string $start_at;
-	public string $expires_at;
-	protected int $user_id;
-	protected string $created_at;
-	protected string $updated_at;
+    protected int $ID;
+    protected string $external_id;
+    protected string $product_name;
+    public int $status;
+    public int $renew_count;
+    public string $renew_at;
+    protected string $start_at;
+    public string $expires_at;
+    protected int $user_id;
+    protected string $created_at;
+    protected string $updated_at;
 
 
-	public function __construct()
-	{
+    public function __construct()
+    {
         $this->ID = 0;
         $this->external_id = '';
         $this->product_name = '';
@@ -27,25 +28,27 @@ class Cextoo_Database{
         $this->expires_at = '';
         $this->user_id = 0;
         $this->created_at = '';
-        $this->updated_at = ''; 
-	}
+        $this->updated_at = '';
+    }
 
     private function camelize($input, $separator = '_')
     {
         return str_replace($separator, '', ucwords($input, $separator));
     }
 
-	public function set($data){
-        
-		foreach ($data as $key => $value){
-            $function = 'set'.$this->camelize($key);
+    public function set($data)
+    {
+
+        foreach ($data as $key => $value) {
+            $function = 'set' . $this->camelize($key);
             if (method_exists(__CLASS__, $function)) {
                 $this->$function($value);
             }
-		}
-	}
+        }
+    }
 
-    public function get_by_user_id($user_id){
+    public function get_by_user_id($user_id)
+    {
         global $wpdb;
         $table_name = $wpdb->prefix . 'cextoo';
         $sql = "SELECT * FROM $table_name WHERE user_id = $user_id";
@@ -53,81 +56,85 @@ class Cextoo_Database{
         return $result;
     }
 
-	public function get($external_id){
-		global $wpdb;
-		$database_result = $wpdb->get_row(
-			"SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE external_id = {$external_id}"
-		);
-		if($database_result){
-			$this->set($database_result);
+    public function get($external_id)
+    {
+        global $wpdb;
+        $database_result = $wpdb->get_row(
+            "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE external_id = {$external_id}"
+        );
+        if ($database_result) {
+            $this->set($database_result);
             return true;
-		}
+        }
         return false;
-	}
+    }
 
     private function uptdateRenewCount()
     {
-        if($this->getStatus() == 1){         
-            if($this->getRenewCount()){
+        if ($this->getStatus() == 1) {
+            if ($this->getRenewCount()) {
                 $this->setRenewCount($this->getRenewCount() + 1);
-            }else{
+            } else {
                 $this->setRenewCount(0);
             }
         }
     }
 
-	public function update(): void
+    public function update(): void
     {
-        if(!$this->getID()){
+        if (!$this->getID()) {
             throw new Exception("Dear friend, I can't do this...");
-         }else{
+        } else {
             global $wpdb;
-		    $this->updateTimestamp();
+            $this->updateTimestamp();
             $this->uptdateRenewCount();
-			$wpdb->update($wpdb->base_prefix.'cextoo',[
+            $wpdb->update(
+                $wpdb->base_prefix . 'cextoo',
+                [
                     'status' => $this->getStatus(),
-                    'renew_count' => $this->getRenewCount(),							
-                    'renew_at' => $this->getRenewAt(),							
+                    'renew_count' => $this->getRenewCount(),
+                    'renew_at' => $this->getRenewAt(),
                     'expires_at' => $this->getExpiresAt(),
                     'updated_at' => $this->getUpdatedAt()
-                ], [
+                ],
+                [
                     'ID' => $this->getID()
                 ]
-			);
+            );
         }
     }
 
-	public function create()
-    {     
-        if($this->getID()){
-           throw new Exception("Dear friend, I can't do this...");
-        }else{
+    public function create()
+    {
+        if ($this->getID()) {
+            throw new Exception("Dear friend, I can't do this...");
+        } else {
             global $wpdb;
             $this->updateTimestamp();
-            $this->uptdateRenewCount();    
-            
-            $wpdb->insert($wpdb->base_prefix.'cextoo', [
-                    'external_id' => $this->getExternalId(),	
-                    'product_name' => $this->getProductName(),
-                    'status' => $this->getStatus(),
-                    'renew_count' => $this->getRenewCount(),							
-                    'renew_at' => $this->getRenewAt(),
-                    'start_at' => $this->getStartAt(),								
-                    'expires_at' => $this->getExpiresAt(),
-                    'user_id' => $this->getUserID(),
-                    'created_at' => $this->getCreatedAt(),
-                    'updated_at' => $this->getUpdatedAt()
-                ]);
-        }
-	}
+            $this->uptdateRenewCount();
 
-	private function updateTimestamp()
+            $wpdb->insert($wpdb->base_prefix . 'cextoo', [
+                'external_id' => $this->getExternalId(),
+                'product_name' => $this->getProductName(),
+                'status' => $this->getStatus(),
+                'renew_count' => $this->getRenewCount(),
+                'renew_at' => $this->getRenewAt(),
+                'start_at' => $this->getStartAt(),
+                'expires_at' => $this->getExpiresAt(),
+                'user_id' => $this->getUserID(),
+                'created_at' => $this->getCreatedAt(),
+                'updated_at' => $this->getUpdatedAt()
+            ]);
+        }
+    }
+
+    private function updateTimestamp()
     {
-		$this->updated_at = date("Y-m-d H:i:s");
-		if(!$this->getCreatedAt()){
-			$this->created_at = $this->updated_at;
-		}
-	}
+        $this->updated_at = date("Y-m-d H:i:s");
+        if (!$this->getCreatedAt()) {
+            $this->created_at = $this->updated_at;
+        }
+    }
 
     /**
      * @return int
@@ -222,8 +229,10 @@ class Cextoo_Database{
      */
     public function setRenewAt($renew_at): void
     {
-        $timestamp = strtotime($renew_at);
-        $this->renew_at = date("Y-m-d H:i:s", $timestamp);
+        if ($renew_at) {
+            $timestamp = strtotime($renew_at);
+            $this->renew_at = date("Y-m-d H:i:s", $timestamp);
+        }
     }
 
     /**
@@ -239,8 +248,10 @@ class Cextoo_Database{
      */
     public function setStartAt($start_at): void
     {
-        $timestamp = strtotime($start_at);
-        $this->start_at = date("Y-m-d H:i:s", $timestamp);
+        if ($start_at) {
+            $timestamp = strtotime($start_at);
+            $this->start_at = date("Y-m-d H:i:s", $timestamp);
+        }
     }
 
     /**
@@ -256,8 +267,10 @@ class Cextoo_Database{
      */
     public function setExpiresAt($expires_at): void
     {
-        $timestamp = strtotime($expires_at);
-        $this->expires_at = date("Y-m-d H:i:s", $timestamp);
+        if ($expires_at) {
+            $timestamp = strtotime($expires_at);
+            $this->expires_at = date("Y-m-d H:i:s", $timestamp);
+        }
     }
 
     /**
@@ -278,11 +291,11 @@ class Cextoo_Database{
      */
     public function setUserId($param): void
     {
-        if(is_int($param)){
+        if (is_int($param)) {
             $this->user_id = $param;
-        }else{
+        } else {
             $user = get_user_by('email', $param);
-            if($user){
+            if ($user) {
                 $this->user_id = $user->ID;
             }
         }
@@ -303,5 +316,4 @@ class Cextoo_Database{
     {
         return $this->updated_at;
     }
-
 }
