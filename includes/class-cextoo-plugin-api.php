@@ -61,9 +61,6 @@ class Cextoo_API
                 ]
             );
 
-            echo $render;
-            exit;
-
             wp_mail(
                 $user_data['user_email'],
                 'Seja bem-vindo ao Defiverso',
