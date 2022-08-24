@@ -24,7 +24,6 @@ class Cextoo_API
         return false;
     }
 
-
     public function remove_customer($data): bool
     {
         if (!email_exists($data['user_email'])) {
@@ -65,6 +64,9 @@ class Cextoo_API
                     'email' => $user_data['user_email']
                 ]
             );
+
+            echo $render;
+            exit;
 
             wp_mail(
                 $user_data['user_email'],
