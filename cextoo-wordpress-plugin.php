@@ -14,7 +14,7 @@
  * Author:            ThiegoCarvalho
  * Author URI:        https://github.com/thiegocarvalho
  * GitHub Plugin URI: https://github.com/thiegocarvalho/cextoo-wordpress-plugin/
- * Primary Branch:    main
+ * Primary Branch:    release
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       cextoo-plugin
@@ -22,17 +22,18 @@
  */
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
+if (!defined('WPINC')) {
 	die;
 }
 
 /**
  * Currently plugin version.
  */
-define( 'CEXTOO_VERSION', '0.1.1' );
+define('CEXTOO_VERSION', '0.1.1');
 
-function activate_cextoo_plugin() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-cextoo-plugin-activator.php';
+function activate_cextoo_plugin()
+{
+	require_once plugin_dir_path(__FILE__) . 'includes/class-cextoo-plugin-activator.php';
 	Cextoo_Activator::activate();
 }
 
@@ -40,19 +41,20 @@ function activate_cextoo_plugin() {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-cextoo-plugin-deactivator.php
  */
-function deactivate_cextoo_plugin() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-cextoo-plugin-deactivator.php';
+function deactivate_cextoo_plugin()
+{
+	require_once plugin_dir_path(__FILE__) . 'includes/class-cextoo-plugin-deactivator.php';
 	Cextoo_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_cextoo_plugin' );
-register_deactivation_hook( __FILE__, 'deactivate_cextoo_plugin' );
+register_activation_hook(__FILE__, 'activate_cextoo_plugin');
+register_deactivation_hook(__FILE__, 'deactivate_cextoo_plugin');
 
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-cextoo-plugin.php';
+require plugin_dir_path(__FILE__) . 'includes/class-cextoo-plugin.php';
 
 /**
  * Begins execution of the plugin.
@@ -63,10 +65,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-cextoo-plugin.php';
  *
  * @since    0.1.0
  */
-function run_cextoo_plugin() {
+function run_cextoo_plugin()
+{
 
 	$plugin = new Cextoo();
 	$plugin->run();
-
 }
 run_cextoo_plugin();
