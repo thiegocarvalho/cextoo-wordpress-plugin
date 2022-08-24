@@ -12,15 +12,11 @@ class Cextoo_API
         $user_id = email_exists($user_data['user_email']);
         if (!$user_id) {
             $user_id =  wp_insert_user($user_data);
+            $this->send_notification_wellcome_email($user_data, $user_id);
+            return true;
         } else {
             $this->add_customer_role($user_data);
         }
-
-        if ($user_id) {
-            $this->send_notification_wellcome_email($user_data, $user_id);
-            return true;
-        }
-
         return false;
     }
 
