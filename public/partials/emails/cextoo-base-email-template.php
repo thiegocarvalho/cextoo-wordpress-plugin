@@ -124,8 +124,8 @@
                                                                 <div align="center" class="alignment"
                                                                     style="line-height:10px"><img alt="Defiverso"
                                                                         src="<?php echo plugin_dir_url('cextoo-wordpress-plugin/public/images/email') . 'email/'; ?>logo-site-final.png"
-                                                                        style="display: block; height: auto; border: 0; width: 125px; max-width: 100%;"
-                                                                        title="Defiverso" width="125" /></div>
+                                                                        style="display: block; height: auto; border: 0; width: 200px; max-width: 100%;"
+                                                                        title="Defiverso" width="200" /></div>
                                                             </td>
                                                         </tr>
                                                     </table>
