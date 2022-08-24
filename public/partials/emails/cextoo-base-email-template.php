@@ -182,7 +182,7 @@
                                                                             oficialmente um Defizero!</p>
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
-                                                                             </p>
+                                                                        </p>
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: left;">
                                                                             Quem são os Defizeros? Pessoas que estão
@@ -194,7 +194,7 @@
                                                                             de cada um.</p>
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
-                                                                             </p>
+                                                                        </p>
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: left;">
                                                                             Ser um Defizero significa que você
@@ -205,7 +205,7 @@
                                                                             milionário.</p>
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
-                                                                             </p>
+                                                                        </p>
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: left;">
                                                                             Ao se tornar um Defizero, você
@@ -219,7 +219,7 @@
                                                                             oportunidades nesse espaço.</p>
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
-                                                                             </p>
+                                                                        </p>
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: left;">
                                                                             Esteja preparado para aprender sobre
@@ -232,7 +232,7 @@
                                                                             Discord.</p>
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
-                                                                             </p>
+                                                                        </p>
                                                                         <p
                                                                             style="margin: 0; font-size: 14px; text-align: left;">
                                                                             Assistindo esse vídeo você conseguirá
