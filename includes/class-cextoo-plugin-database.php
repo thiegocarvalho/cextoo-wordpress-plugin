@@ -38,13 +38,15 @@ class Cextoo_Database
 
     public function set($data)
     {
-
         foreach ($data as $key => $value) {
             $function = 'set' . $this->camelize($key);
             if (method_exists(__CLASS__, $function)) {
+
                 $this->$function($value);
             }
         }
+
+        return $this;
     }
 
     public function get_by_user_id($user_id)
@@ -126,6 +128,58 @@ class Cextoo_Database
                 'updated_at' => $this->getUpdatedAt()
             ]);
         }
+    }
+
+    public function desactiveExpiredSubscriptions()
+    {
+        global $wpdb;
+
+        $database_result = $wpdb->get_results(
+            "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE expires_at <= DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND STATUS = 1"
+        );
+
+        if ($database_result) {
+            foreach ($database_result as $subscription) {
+                $subscriptionObject = $this->set((array)$subscription);
+                $subscriptionObject->setStatus(0);
+                $subscriptionObject->update();
+                $user = get_user_by('id', $this->getUserId());
+                if ($user) {
+                    $user->remove_role($this->slugify($this->getProductName()));
+                }
+                $subscriptionObject->unsetAllAtributes();
+            }
+        }
+    }
+
+    private function slugify($text, string $divider = '-')
+    {
+        $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
+        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+        $text = preg_replace('~[^-\w]+~', '', $text);
+        $text = trim($text, $divider);
+        $text = preg_replace('~-+~', $divider, $text);
+        $text = strtolower($text);
+
+        if (empty($text)) {
+            return 'n-a';
+        }
+        return $text;
+    }
+
+    private function unsetAllAtributes()
+    {
+        $this->ID = 0;
+        $this->external_id = '';
+        $this->product_name = '';
+        $this->status = 0;
+        $this->renew_count = 0;
+        $this->renew_at = '';
+        $this->start_at = '';
+        $this->expires_at = '';
+        $this->user_id = 0;
+        $this->created_at = '';
+        $this->updated_at = '';
     }
 
     private function updateTimestamp()
@@ -283,7 +337,10 @@ class Cextoo_Database
 
     private function setUserEmail(string $user_email): void
     {
-        $this->setUserId($user_email);
+        $user = get_user_by('email', $user_email);
+        if ($user) {
+            $this->setUserId($user->ID);
+        }
     }
 
     /**
@@ -291,14 +348,7 @@ class Cextoo_Database
      */
     public function setUserId($param): void
     {
-        if (is_int($param)) {
-            $this->user_id = $param;
-        } else {
-            $user = get_user_by('email', $param);
-            if ($user) {
-                $this->user_id = $user->ID;
-            }
-        }
+        $this->user_id = $param;
     }
 
     /**
@@ -315,5 +365,31 @@ class Cextoo_Database
     public function getUpdatedAt()
     {
         return $this->updated_at;
+    }
+
+    /**
+     * 
+     */
+    public function createDatabase()
+    {
+        global $wpdb;
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE `{$wpdb->base_prefix}cextoo` (
+			ID bigint(20) unsigned NOT NULL auto_increment,
+			external_id varchar(250) NOT NULL,
+			product_name varchar(250) NOT NULL,
+			status int(11) NOT NULL default '0',
+			renew_count int(11) NOT NULL default '0',
+			renew_at datetime NULL,
+			start_at datetime NOT NULL,
+			expires_at datetime NULL,
+			user_id bigint(20) UNSIGNED NOT NULL,
+			created_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (ID)
+		  ) $charset_collate;";
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
     }
 }

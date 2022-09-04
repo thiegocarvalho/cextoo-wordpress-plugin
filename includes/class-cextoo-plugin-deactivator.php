@@ -20,7 +20,8 @@
  * @subpackage Cextoo_Plugin/includes
  * @author     ThiegoCarvalho <carvalho.thiego@gmail.com>
  */
-class Cextoo_Deactivator {
+class Cextoo_Deactivator
+{
 
 	/**
 	 * Short Description. (use period)
@@ -29,8 +30,9 @@ class Cextoo_Deactivator {
 	 *
 	 * @since    0.1.0
 	 */
-	public static function deactivate() {
-
+	public static function deactivate()
+	{
+		$crons = new Cextoo_Crons();
+		$crons->cextoo_manager_subscriptions_job_desactivation();
 	}
-
 }
