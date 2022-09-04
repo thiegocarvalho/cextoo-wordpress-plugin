@@ -135,7 +135,7 @@ class Cextoo_Database
         global $wpdb;
 
         $database_result = $wpdb->get_results(
-            "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE expires_at <= DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND STATUS = 1"
+            "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE expires_at < DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND STATUS = 1"
         );
 
         if ($database_result) {
