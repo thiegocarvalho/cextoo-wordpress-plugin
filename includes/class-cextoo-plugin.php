@@ -15,7 +15,8 @@
  * @subpackage Cextoo/includes
  * @author     ThiegoCarvalho <carvalho.thiego@gmail.com>
  */
-class Cextoo {
+class Cextoo
+{
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -54,22 +55,23 @@ class Cextoo {
 	 *
 	 * @since    0.1.0
 	 */
-	public function __construct() {
-		if ( defined( 'CEXTOO_VERSION' ) ) {
+	public function __construct()
+	{
+		if (defined('CEXTOO_VERSION')) {
 			$this->version = CEXTOO_VERSION;
 		} else {
-			$this->version = '0.1.1';
+			$this->version = '0.1.2';
 		}
 		$this->plugin_name = 'cextoo-plugin';
 
 		$this->load_dependencies();
 		$this->set_locale();
-        $this->set_api();
+		$this->set_api();
+		$this->set_cron_jobs();
 		$this->set_shortcodes();
 		$this->set_email_type();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -88,48 +90,50 @@ class Cextoo {
 	 * @since    0.1.0
 	 * @access   private
 	 */
-	private function load_dependencies() {
+	private function load_dependencies()
+	{
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cextoo-plugin-loader.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-cextoo-plugin-loader.php';
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cextoo-plugin-i18n.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-cextoo-plugin-i18n.php';
 
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cextoo-plugin-database.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-cextoo-plugin-database.php';
 
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cextoo-plugin-api.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-cextoo-plugin-api.php';
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cextoo-plugin-shortcode.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-cextoo-plugin-shortcode.php';
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-cextoo-plugin-template.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-cextoo-plugin-template.php';
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-cextoo-plugin-admin.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-cextoo-plugin-crons.php';
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-cextoo-plugin-public.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-cextoo-plugin-admin.php';
+
+		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-cextoo-plugin-public.php';
 
 		$this->loader = new Cextoo_Loader();
-
 	}
 
-	/**
-	 * Define the locale for this plugin for internationalization.
-	 *
-	 * Uses the Cextoo_i18n class in order to set the domain and to register the hook
-	 * with WordPress.
-	 *
-	 * @since    0.1.0
-	 * @access   private
-	 */
+	private function set_api()
+	{
+		$plugin_api = new Cextoo_API();
 
-    private function set_api() {
-        $plugin_api = new Cextoo_API();
+		$this->loader->add_action('rest_api_init', $plugin_api, 'set_endpoints');
+	}
 
-        $this->loader->add_action( 'rest_api_init', $plugin_api, 'set_endpoints' );
-    }
+	private function set_cron_jobs()
+	{
+		$cron_class = new Cextoo_Crons();
+		foreach ($cron_class->jobs as $job) {
+			$this->loader->add_action($job, $cron_class, $job);
+		}
+	}
 
-	private function set_shortcodes() {
+	private function set_shortcodes()
+	{
 		$plugin_shortcode = new Cextoo_Shortcode();
 
-		$this->loader->add_action( 'init', $plugin_shortcode, 'register_shortcodes' );
+		$this->loader->add_action('init', $plugin_shortcode, 'register_shortcodes');
 	}
 
 	public function set_email_type_function()
@@ -137,16 +141,17 @@ class Cextoo {
 		return 'text/html';
 	}
 
-	private function set_email_type() {
-		$this->loader->add_filter( 'wp_mail_content_type', $this, 'set_email_type_function' );
+	private function set_email_type()
+	{
+		$this->loader->add_filter('wp_mail_content_type', $this, 'set_email_type_function');
 	}
 
-	private function set_locale() {
+	private function set_locale()
+	{
 
 		$plugin_i18n = new Cextoo_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
+		$this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 	}
 
 	/**
@@ -156,15 +161,15 @@ class Cextoo {
 	 * @since    0.1.0
 	 * @access   private
 	 */
-	private function define_admin_hooks() {
+	private function define_admin_hooks()
+	{
 
-		$plugin_admin = new Cextoo_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Cextoo_Admin($this->get_plugin_name(), $this->get_version());
 
-        $this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_page' );
-        $this->loader->add_action( 'admin_init', $plugin_admin, 'register_options' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-
+		$this->loader->add_action('admin_menu', $plugin_admin, 'add_admin_page');
+		$this->loader->add_action('admin_init', $plugin_admin, 'register_options');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 	}
 
 	/**
@@ -174,13 +179,13 @@ class Cextoo {
 	 * @since    0.1.0
 	 * @access   private
 	 */
-	private function define_public_hooks() {
+	private function define_public_hooks()
+	{
 
-		$plugin_public = new Cextoo_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Cextoo_Public($this->get_plugin_name(), $this->get_version());
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 	}
 
 	/**
@@ -188,7 +193,8 @@ class Cextoo {
 	 *
 	 * @since    0.1.0
 	 */
-	public function run() {
+	public function run()
+	{
 		$this->loader->run();
 	}
 
@@ -199,7 +205,8 @@ class Cextoo {
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_plugin_name() {
+	public function get_plugin_name()
+	{
 		return $this->plugin_name;
 	}
 
@@ -209,7 +216,8 @@ class Cextoo {
 	 * @since     1.0.0
 	 * @return    Cextoo_Loader    Orchestrates the hooks of the plugin.
 	 */
-	public function get_loader() {
+	public function get_loader()
+	{
 		return $this->loader;
 	}
 
@@ -219,7 +227,8 @@ class Cextoo {
 	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
 	 */
-	public function get_version() {
+	public function get_version()
+	{
 		return $this->version;
 	}
 }
