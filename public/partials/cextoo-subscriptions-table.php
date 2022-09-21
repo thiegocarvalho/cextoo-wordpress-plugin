@@ -84,7 +84,7 @@
         if ($subscription->status && !empty($subscription->renew_at)) {
             $status = 'border-left-color: #90EE90;';
             $button = [
-                'text' => "cancelar",
+                'text' => "Gerenciar Assinatura",
                 'class' => 'cextoo-button bg-cancel',
                 #TODO mudar para configuração do plugins para setar URL da action
                 'action' => 'https://checkout.defiverso.com/subscription/' . $subscription->external_id

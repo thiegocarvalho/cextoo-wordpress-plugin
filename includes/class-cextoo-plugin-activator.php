@@ -34,6 +34,7 @@ class Cextoo_Activator
 	{
 		$crons = new Cextoo_Crons();
 		$crons->cextoo_manager_subscriptions_job_activation();
+		$crons->cextoo_manager_email_renew_job_activation();
 		$database = new Cextoo_Database();
 		$database->createDatabase();
 	}

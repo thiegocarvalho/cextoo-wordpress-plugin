@@ -34,5 +34,6 @@ class Cextoo_Deactivator
 	{
 		$crons = new Cextoo_Crons();
 		$crons->cextoo_manager_subscriptions_job_desactivation();
+		$crons->cextoo_manager_email_renew_job_desactivation();
 	}
 }

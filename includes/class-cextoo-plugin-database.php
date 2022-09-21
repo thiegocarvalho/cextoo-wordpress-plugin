@@ -53,9 +53,8 @@ class Cextoo_Database
     {
         global $wpdb;
         $table_name = $wpdb->prefix . 'cextoo';
-        $sql = "SELECT * FROM $table_name WHERE user_id = $user_id";
-        $result = $wpdb->get_results($sql);
-        return $result;
+        $sql = "SELECT * FROM `{$table_name}` WHERE user_id = {$user_id}";
+		return $wpdb->get_results($sql);
     }
 
     public function get($external_id)
@@ -129,6 +128,55 @@ class Cextoo_Database
             ]);
         }
     }
+
+	/**
+	 * @param int $days
+	 *
+	 * @return void
+	 * @throws Exception
+	 */
+	public function renewSubscriptions(int $days): void
+	{
+		global $wpdb;
+
+		$sql = "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE expires_at = DATE_ADD(CURDATE(), INTERVAL {$days} DAY) AND STATUS = 1";
+		$database_result = $wpdb->get_results($sql);
+		if ($database_result) {
+			foreach ( $database_result as $subscription ) {
+
+				$subscriptionObject = $this->set( (array) $subscription );
+
+				if($days == 1){
+					$template = 'cextoo-renew-email-1-day.php';
+					$subject = 'Sua Renovação do Defiverso precisa ser amanhã';
+				}
+
+				if($days == 0){
+					$template = 'cextoo-renew-email-last-day.php';
+					$subject = 'Hoje é o último dia para renovar sua Assinatura do Defiverso';
+				}
+
+				if(isset($template) && isset($subject)){
+					$engine = new Cextoo_Template(
+						WP_PLUGIN_DIR  . '/' . plugin_basename(__DIR__) . '/../public/partials/emails/'
+					);
+
+					$render =  $engine->render($template);
+
+					$user = get_user_by('id', $subscriptionObject->getUserId());
+
+					wp_mail(
+						$user->get('user_email'),
+						$subject,
+						$render
+					);
+				}
+
+
+			}
+		}
+
+	}
 
     public function desactiveExpiredSubscriptions()
     {

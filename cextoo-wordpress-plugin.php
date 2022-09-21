@@ -9,8 +9,8 @@
  * @wordpress-plugin
  * Plugin Name:       Cextoo
  * Plugin URI:        https://cextoo.com
- * Description:       Decoupling to your sales system.
- * Version:           0.1.1
+ * Description:       Cextoo system.
+ * Version:           0.1.2
  * Author:            ThiegoCarvalho
  * Author URI:        https://github.com/thiegocarvalho
  * GitHub Plugin URI: https://github.com/thiegocarvalho/cextoo-wordpress-plugin/
@@ -29,7 +29,7 @@ if (!defined('WPINC')) {
 /**
  * Currently plugin version.
  */
-define('CEXTOO_VERSION', '0.1.1');
+define('CEXTOO_VERSION', '0.1.2');
 
 function activate_cextoo_plugin()
 {

@@ -2,7 +2,7 @@
 	"name": "thiegocarvalho/cextoo-wordpress-plugin",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-only",
-	"description": "Decoupling sales system",
+	"description": "Cextoo system",
 	"homepage": "https://github.com/thiegocarvalho/cextoo-wordpress-plugin",
 	"authors": [
 		{
