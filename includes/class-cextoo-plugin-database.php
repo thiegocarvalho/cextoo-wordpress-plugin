@@ -2,7 +2,6 @@
 
 class Cextoo_Database
 {
-
     protected int $ID;
     protected string $external_id;
     protected string $product_name;
@@ -41,7 +40,6 @@ class Cextoo_Database
         foreach ($data as $key => $value) {
             $function = 'set' . $this->camelize($key);
             if (method_exists(__CLASS__, $function)) {
-
                 $this->$function($value);
             }
         }
@@ -54,7 +52,7 @@ class Cextoo_Database
         global $wpdb;
         $table_name = $wpdb->prefix . 'cextoo';
         $sql = "SELECT * FROM `{$table_name}` WHERE user_id = {$user_id}";
-		return $wpdb->get_results($sql);
+        return $wpdb->get_results($sql);
     }
 
     public function get($external_id)
@@ -76,7 +74,7 @@ class Cextoo_Database
             if ($this->getRenewCount()) {
                 $this->setRenewCount($this->getRenewCount() + 1);
             } else {
-                $this->setRenewCount(0);
+                $this->setRenewCount(1);
             }
         }
     }
@@ -129,72 +127,95 @@ class Cextoo_Database
         }
     }
 
-	/**
-	 * @param int $days
-	 *
-	 * @return void
-	 * @throws Exception
-	 */
-	public function renewSubscriptions(int $days): void
-	{
-		global $wpdb;
+    private function haveOtherActiveSubscription($subscriptionObject)
+    {
+        global $wpdb;
 
-		$sql = "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE expires_at = DATE_ADD(CURDATE(), INTERVAL {$days} DAY) AND STATUS = 1";
-		$database_result = $wpdb->get_results($sql);
-		if ($database_result) {
-			foreach ( $database_result as $subscription ) {
+        $sql = "SELECT * FROM `{$wpdb->base_prefix}cextoo`
+                WHERE user_id = {$subscriptionObject->getUserId()} 
+                AND external_id != {$subscriptionObject->getExternalId()} 
+                AND product_name = {$subscriptionObject->getProductName()}
+                AND status = 1";
 
-				$subscriptionObject = $this->set( (array) $subscription );
+        $database_result = $wpdb->get_results($sql);
+        if ($database_result) {
+            return true;
+        }
+        return false;
+    }
 
-				if($days == 1){
-					$template = 'cextoo-renew-email-1-day.php';
-					$subject = 'Sua Renovação do Defiverso precisa ser amanhã';
-				}
+    /**
+     * @param int $days
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function renewSubscriptions(int $days): void
+    {
+        global $wpdb;
 
-				if($days == 0){
-					$template = 'cextoo-renew-email-last-day.php';
-					$subject = 'Hoje é o último dia para renovar sua Assinatura do Defiverso';
-				}
+        $sql = "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE renew_at = DATE_ADD(CURDATE(), INTERVAL {$days} DAY) AND STATUS = 1";
+        $database_result = $wpdb->get_results($sql);
+        if ($database_result) {
+            foreach ($database_result as $subscription) {
 
-				if(isset($template) && isset($subject)){
-					$engine = new Cextoo_Template(
-						WP_PLUGIN_DIR  . '/' . plugin_basename(__DIR__) . '/../public/partials/emails/'
-					);
+                $subscriptionObject = $this->set((array) $subscription);
 
-					$render =  $engine->render($template);
+                if ($this->haveOtherActiveSubscription($subscriptionObject)) {
+                    continue;
+                }
 
-					$user = get_user_by('id', $subscriptionObject->getUserId());
+                if ($days == 1) {
+                    $template = 'cextoo-renew-email-1-day.php';
+                    $subject = 'Sua Renovação ' . $subscriptionObject->getProductName() . ' precisa ser amanhã';
+                }
 
-					wp_mail(
-						$user->get('user_email'),
-						$subject,
-						$render
-					);
-				}
+                if ($days == 0) {
+                    $template = 'cextoo-renew-email-last-day.php';
+                    $subject = 'Hoje é o último dia para renovar sua Assinatura' . $subscriptionObject->getProductName();
+                }
 
+                if (isset($template) && isset($subject)) {
+                    $engine = new Cextoo_Template(
+                        WP_PLUGIN_DIR  . '/' . plugin_basename(__DIR__) . '/../public/partials/emails/'
+                    );
 
-			}
-		}
+                    $render =  $engine->render($template);
 
-	}
+                    $user = get_user_by('id', $subscriptionObject->getUserId());
+
+                    wp_mail(
+                        $user->get('user_email'),
+                        $subject,
+                        $render
+                    );
+                }
+            }
+        }
+    }
 
     public function desactiveExpiredSubscriptions()
     {
         global $wpdb;
 
         $database_result = $wpdb->get_results(
-            "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE expires_at < DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND STATUS = 1"
+            "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE renew_at < DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND STATUS = 1"
         );
 
         if ($database_result) {
             foreach ($database_result as $subscription) {
                 $subscriptionObject = $this->set((array)$subscription);
+                $subscriptionObject->setExpiresAt(date('d-m-y h:i:s'));
                 $subscriptionObject->setStatus(0);
                 $subscriptionObject->update();
-                $user = get_user_by('id', $this->getUserId());
-                if ($user) {
-                    $user->remove_role($this->slugify($this->getProductName()));
+
+                if (!$this->haveOtherActiveSubscription($subscriptionObject)) {
+                    $user = get_user_by('id', $subscriptionObject->getUserId());
+                    if ($user) {
+                        $user->remove_role($this->slugify($subscriptionObject->getProductName()));
+                    }
                 }
+
                 $subscriptionObject->unsetAllAtributes();
             }
         }

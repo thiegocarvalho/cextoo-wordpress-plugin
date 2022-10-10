@@ -159,7 +159,7 @@
                                                         <tr>
                                                             <td class="pad" style="text-align:center;width:100%;">
                                                                 <h1
-                                                                    style="margin: 0; color: #393d47; direction: ltr; font-family: Tahoma, Verdana, Segoe, sans-serif; font-size: 25px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;">
+                                                                    style=" color: #393d47; direction: ltr; font-family: Tahoma, Verdana, Segoe, sans-serif; font-size: 25px; font-weight: 400; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;">
                                                                     <strong>Seja bem vindo ao Defiverso</strong>
                                                                 </h1>
                                                             </td>
@@ -175,16 +175,16 @@
                                                                     <div class="txtTinyMce-wrapper"
                                                                         style="font-size: 12px; font-family: Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 18px; color: #393d47; line-height: 1.5;">
                                                                         <p
-                                                                            style="margin: 0; font-size: 14px; text-align: left;">
+                                                                            style=" font-size: 14px; text-align: left;">
                                                                             Agora podemos dizer que você acabou de
                                                                             entrar no Universo das Finanças
                                                                             Descentralizadas, portanto você agora é
                                                                             oficialmente um Defizero!</p>
                                                                         <p
-                                                                            style="margin: 0; font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
+                                                                            style=" font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
                                                                         </p>
                                                                         <p
-                                                                            style="margin: 0; font-size: 14px; text-align: left;">
+                                                                            style=" font-size: 14px; text-align: left;">
                                                                             Quem são os Defizeros? Pessoas que estão
                                                                             dentro do Defiverso e são viciadas em Defi,
                                                                             sempre buscando aprender cada dia mais.
@@ -193,10 +193,10 @@
                                                                             universo agregue cada vez mais valor na vida
                                                                             de cada um.</p>
                                                                         <p
-                                                                            style="margin: 0; font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
+                                                                            style=" font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
                                                                         </p>
                                                                         <p
-                                                                            style="margin: 0; font-size: 14px; text-align: left;">
+                                                                            style=" font-size: 14px; text-align: left;">
                                                                             Ser um Defizero significa que você
                                                                             compartilha da visão de longo prazo próspera
                                                                             para as finanças descentralizadas e não
@@ -204,10 +204,10 @@
                                                                             investindo no projeto que promete te deixar
                                                                             milionário.</p>
                                                                         <p
-                                                                            style="margin: 0; font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
+                                                                            style=" font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
                                                                         </p>
                                                                         <p
-                                                                            style="margin: 0; font-size: 14px; text-align: left;">
+                                                                            style=" font-size: 14px; text-align: left;">
                                                                             Ao se tornar um Defizero, você
                                                                             automaticamente se torna membro de um grupo
                                                                             seleto de pessoas que recebem conteúdos e
@@ -218,10 +218,10 @@
                                                                             investimentos e aproveitar as melhores
                                                                             oportunidades nesse espaço.</p>
                                                                         <p
-                                                                            style="margin: 0; font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
+                                                                            style=" font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
                                                                         </p>
                                                                         <p
-                                                                            style="margin: 0; font-size: 14px; text-align: left;">
+                                                                            style=" font-size: 14px; text-align: left;">
                                                                             Esteja preparado para aprender sobre
                                                                             criptomoedas, NFTs e Metaverso de uma forma
                                                                             diferente e didática. A partir de agora você
@@ -231,34 +231,9 @@
                                                                             plataforma e como se conectar ao servidor do
                                                                             Discord.</p>
                                                                         <p
-                                                                            style="margin: 0; font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
+                                                                            style=" font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
                                                                         </p>
-                                                                        <p
-                                                                            style="margin: 0; font-size: 14px; text-align: left;">
-                                                                            Assistindo esse vídeo você conseguirá
-                                                                            entender como funciona o nosso ecossistema e
-                                                                            então obter o máximo de aproveitamento
-                                                                            dentro do Defiverso.</p>
                                                                     </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <table border="0" cellpadding="0" cellspacing="0"
-                                                        class="image_block block-3" role="presentation"
-                                                        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;"
-                                                        width="100%">
-                                                        <tr>
-                                                            <td class="pad"
-                                                                style="width:100%;padding-right:0px;padding-left:0px;">
-                                                                <div align="center" class="alignment"
-                                                                    style="line-height:10px">
-                                                                    <a href="<?php echo $link; ?>" target="_blank">
-                                                                        <img class="big"
-                                                                            src="<?php echo plugin_dir_url('cextoo-wordpress-plugin/public/images/email') . 'email/'; ?>player-guia-do-defiverso.png"
-                                                                            style="display: block; height: auto; border: 0; width: 500px; max-width: 100%;"
-                                                                            width="500" />
-                                                                    </a>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -271,17 +246,17 @@
                                                             <td class="pad">
                                                                 <div
                                                                     style="color:#000000;font-size:14px;font-family:Arial, Helvetica Neue, Helvetica, sans-serif;font-weight:400;line-height:120%;text-align:left;direction:ltr;letter-spacing:0px;mso-line-height-alt:16.8px;">
-                                                                    <p style="margin: 0; margin-bottom: 16px;">Você
+                                                                    <p style=" margin-bottom: 16px;">Você
                                                                         acabou de dar o passo mais importante para
                                                                         prosperar junto com a evolução do mercado,
                                                                         obrigado pela confiança e por nos escolher como
                                                                         guia nessa sua jornada.</p>
-                                                                    <p style="margin: 0; margin-bottom: 16px;">A partir
+                                                                    <p style=" margin-bottom: 16px;">A partir
                                                                         de agora, estamos dispostos para receber
                                                                         qualquer dúvida em relação a plataforma e
                                                                         possíveis erros, basta enviar um e-mail para
                                                                         suporte@defiverso.com</p>
-                                                                    <p style="margin: 0;">Atenciosamente Equipe
+                                                                    <p style="">Atenciosamente Equipe
                                                                         Defiverso.</p>
                                                                 </div>
                                                             </td>
@@ -319,7 +294,7 @@
                                                                     <div class="txtTinyMce-wrapper"
                                                                         style="font-size: 12px; font-family: Tahoma, Verdana, Segoe, sans-serif; text-align: center; mso-line-height-alt: 18px; color: #393d47; line-height: 1.5;">
                                                                         <p
-                                                                            style="margin: 0; mso-line-height-alt: 19.5px;">
+                                                                            style=" mso-line-height-alt: 19.5px;">
                                                                         </p>
                                                                     </div>
                                                                 </div>
