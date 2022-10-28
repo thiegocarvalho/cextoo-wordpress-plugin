@@ -194,6 +194,39 @@ class Cextoo_Database
         }
     }
 
+    private function massRemoveRoles(WP_User $user)
+
+    {
+        global $wp_roles;
+        foreach ($wp_roles->get_names() as $role => $name) {
+            $user->remove_role($role);
+        }
+    }
+
+    public function desactiveAnomalyUsers()
+    {
+        global $wpdb;
+        $customersIds = $wpdb->get_results(
+            "SELECT DISTINCT(user_id) FROM `{$wpdb->base_prefix}cextoo`"
+        );
+
+        #TODO em pleno ano de 2022, ano da tecnologia não dá para fazer mais isso não...
+        $customersIds = array_column(
+            json_decode(json_encode($customersIds), true),
+            "user_id"
+        );
+
+        $anomalyUsers = get_users([
+            "role__not_in" => ['editor', 'administrator'],
+            "exclude" => $customersIds,
+        ]);
+
+        /** @var WP_User $user */
+        foreach ($anomalyUsers as $user) {
+            $this->massRemoveRoles($user);
+        }
+    }
+
     public function desactiveExpiredSubscriptions()
     {
         global $wpdb;
