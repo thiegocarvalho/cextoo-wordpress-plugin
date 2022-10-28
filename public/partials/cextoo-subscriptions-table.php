@@ -5,8 +5,9 @@
 <style>
 .cextoo-cards {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(200px, 4fr));
     grid-auto-rows: auto;
+    object-fit: cover;
     grid-gap: .5rem;
 }
 
@@ -59,6 +60,14 @@
             #792840);
 }
 
+.cextoo-button.bg-success {
+    background-image: linear-gradient(to right,
+            #009e28,
+            #0cc12f,
+            #06b02b,
+            #009e28);
+}
+
 .cextoo-button.bg-desactivate {
     background-image: linear-gradient(to right,
             #EEEEEE,
@@ -81,20 +90,22 @@
 </style>
 <div class="cextoo-cards">
     <?php foreach ($subscriptions as $subscription) :
-        if ($subscription->status && !empty($subscription->renew_at)) {
-            $status = 'border-left-color: #90EE90;';
+        $countdown = date_diff(date_create($subscription->renew_at), date_create());
+        if ($subscription->status && (int)$countdown->days == 1) {
+            $status = 'border-left-color:  #a40a0a;';
             $button = [
-                'text' => "Gerenciar Assinatura",
-                'class' => 'cextoo-button bg-cancel',
-                #TODO mudar para configuração do plugins para setar URL da action
+                'text' => "Renovar",
+                'class' => 'cextoo-button bg-success',
                 'action' => 'https://checkout.defiverso.com/subscription/' . $subscription->external_id
             ];
         } else {
-            $status = 'border-left-color: #999999;';
+            $status = 'border-left-color: #90EE90;';
             $button = [
-                'text' => "<s>cancelar</s>",
-                'class' => 'cextoo-button bg-desactivate',
-                'action' => false
+                'text' => "Cancelar",
+                'class' => 'cextoo-button bg-cancel',
+                'action' => "mailto:suporte@defiverso.com?subject=Cancelamento de Assinatura #"
+                    . $subscription->external_id . "&body=Solicitação de cancelamento, "
+                    . $subscription->product_name . " - adiqurido em: " . date('d/m/Y', strtotime($subscription->start_at))
             ];
         }
     ?>
@@ -112,17 +123,13 @@
                 <?php if ($subscription->renew_at) : ?>
                 <strong>renovação: </strong>
                 <?php echo date("d/m/Y", strtotime($subscription->renew_at)) ?>
-                <?php else : ?>
-                --
                 <?php endif; ?>
             </p>
 
             <p class="cextoo-card-text">
-                <?php if ($subscription->expires_at) : ?>
+                <?php if ($subscription->expires_at != "0000-00-00 00:00:00") : ?>
                 <strong>cancelado: </strong>
                 <?php echo date("d/m/Y", strtotime($subscription->expires_at)) ?>
-                <?php else : ?>
-                --
                 <?php endif; ?>
             </p>
 
