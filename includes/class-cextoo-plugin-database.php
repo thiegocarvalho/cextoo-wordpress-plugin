@@ -127,14 +127,14 @@ class Cextoo_Database
         }
     }
 
-    private function haveOtherActiveSubscription($subscriptionObject)
+    public function haveOtherActiveSubscription()
     {
         global $wpdb;
 
         $sql = "SELECT * FROM `{$wpdb->base_prefix}cextoo`
-                WHERE user_id = {$subscriptionObject->getUserId()} 
-                AND external_id != {$subscriptionObject->getExternalId()} 
-                AND product_name = {$subscriptionObject->getProductName()}
+                WHERE user_id = {$this->getUserId()} 
+                AND external_id != {$this->getExternalId()} 
+                AND product_name = {$this->getProductName()}
                 AND status = 1";
 
         $database_result = $wpdb->get_results($sql);
@@ -161,7 +161,7 @@ class Cextoo_Database
 
                 $subscriptionObject = $this->set((array) $subscription);
 
-                if ($this->haveOtherActiveSubscription($subscriptionObject)) {
+                if ($subscriptionObject->haveOtherActiveSubscription()) {
                     continue;
                 }
 
@@ -209,13 +209,12 @@ class Cextoo_Database
                 $subscriptionObject->setStatus(0);
                 $subscriptionObject->update();
 
-                if (!$this->haveOtherActiveSubscription($subscriptionObject)) {
+                if (!$subscriptionObject->haveOtherActiveSubscription()) {
                     $user = get_user_by('id', $subscriptionObject->getUserId());
                     if ($user) {
                         $user->remove_role($this->slugify($subscriptionObject->getProductName()));
                     }
                 }
-
                 $subscriptionObject->unsetAllAtributes();
             }
         }
