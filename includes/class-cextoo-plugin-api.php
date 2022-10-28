@@ -140,7 +140,9 @@ class Cextoo_API
         if ($data['status'] == 1) {
             $this->add_customer_role($data);
         } else {
-            $this->remove_customer_role($data);
+            if (!$database->haveOtherActiveSubscription()) {
+                $this->remove_customer_role($data);
+            }
         }
     }
 
