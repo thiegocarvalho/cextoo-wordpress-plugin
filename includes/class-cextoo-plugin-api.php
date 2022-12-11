@@ -73,7 +73,7 @@ class Cextoo_API
 
     private function format_wp_user($data, $password)
     {
-        $role = $this->find_or_create_role($data['product_name']);
+        $role = $this->find_or_create_role($data['body']['rule_name'], $data['body']['rule_slug']);
         return [
             'user_pass' =>  $password,
             'user_login' => $data['user_email'],
@@ -82,22 +82,11 @@ class Cextoo_API
         ];
     }
 
-    private function find_role($sanitize_product_name)
+    public function find_or_create_role($rule_name, $rule_slug)
     {
-        global $wp_roles;
-        $all_roles = $wp_roles->roles;
-        $editable_roles = apply_filters('editable_roles', $all_roles);
-        return array_key_exists($sanitize_product_name, $editable_roles);
-    }
-
-    public function find_or_create_role($product_name)
-    {
-        $sanitize = sanitize_title($product_name);
-        if (!$this->find_role($sanitize)) {
-            add_role($sanitize, $product_name, ['read' => true, 'level_0' => true]);
-        }
-
-        return $sanitize;
+        $rule_slug = sanitize_title($rule_slug);
+        add_role($rule_slug, $rule_name, ['read' => true, 'level_0' => true]);
+        return $rule_slug;
     }
 
 
@@ -105,7 +94,7 @@ class Cextoo_API
     {
         $user = get_user_by('email', $data['user_email']);
         if ($user) {
-            $user->add_role($this->find_or_create_role($data['product_name']));
+            $user->add_role($this->find_or_create_role($data['body']['rule_name'], $data['body']['rule_slug']));
             return true;
         }
         return false;
@@ -115,7 +104,7 @@ class Cextoo_API
     {
         $user = get_user_by('email', $data['user_email']);
         if ($user) {
-            $user->remove_role($this->find_or_create_role($data['product_name']));
+            $user->remove_role($this->find_or_create_role($data['body']['rule_name'], $data['body']['rule_slug']));
             return true;
         }
         return false;
@@ -158,7 +147,12 @@ class Cextoo_API
             switch ($data['event']) {
                 case 'CREATE_RULE':
                     return new WP_REST_Response(
-                        $this->find_or_create_role($data['body']['product_name'])
+                        $this->find_or_create_role($data['body']['rule_name'], $data['body']['rule_slug'])
+                    );
+                    break;
+                case 'UPDATE_RULE':
+                    return new WP_REST_Response(
+                        $this->find_or_create_role($data['body']['rule_name'], $data['body']['rule_slug'])
                     );
                     break;
                 case 'CREATE_CUSTOMER':

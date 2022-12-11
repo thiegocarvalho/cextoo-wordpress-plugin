@@ -2,32 +2,22 @@
 
 class Cextoo_Database
 {
-    protected int $ID;
-    protected string $external_id;
-    protected string $product_name;
-    public int $status;
-    public int $renew_count;
-    public string $renew_at;
-    protected string $start_at;
-    public string $expires_at;
-    protected int $user_id;
-    protected string $created_at;
-    protected string $updated_at;
+    protected ?int $ID = null;
+    protected ?string $external_id = null;
+    protected ?string $product_name = null;
+    public int $status = 0;
+    public ?string $renew_at = null;
+    protected ?string $start_at = null;
+    public ?string $expires_at = null;
+    protected ?int $user_id = null;
+    protected ?string $rule_name = null;
+    protected ?string $rule_slug = null;
+    protected ?string $created_at = null;
+    protected ?string $updated_at = null;
 
 
     public function __construct()
     {
-        $this->ID = 0;
-        $this->external_id = '';
-        $this->product_name = '';
-        $this->status = 0;
-        $this->renew_count = 0;
-        $this->renew_at = '';
-        $this->start_at = '';
-        $this->expires_at = '';
-        $this->user_id = 0;
-        $this->created_at = '';
-        $this->updated_at = '';
     }
 
     private function camelize($input, $separator = '_')
@@ -68,17 +58,6 @@ class Cextoo_Database
         return false;
     }
 
-    private function uptdateRenewCount()
-    {
-        if ($this->getStatus() == 1) {
-            if ($this->getRenewCount()) {
-                $this->setRenewCount($this->getRenewCount() + 1);
-            } else {
-                $this->setRenewCount(1);
-            }
-        }
-    }
-
     public function update(): void
     {
         if (!$this->getID()) {
@@ -86,12 +65,10 @@ class Cextoo_Database
         } else {
             global $wpdb;
             $this->updateTimestamp();
-            $this->uptdateRenewCount();
             $wpdb->update(
                 $wpdb->base_prefix . 'cextoo',
                 [
                     'status' => $this->getStatus(),
-                    'renew_count' => $this->getRenewCount(),
                     'renew_at' => $this->getRenewAt(),
                     'expires_at' => $this->getExpiresAt(),
                     'updated_at' => $this->getUpdatedAt()
@@ -110,17 +87,17 @@ class Cextoo_Database
         } else {
             global $wpdb;
             $this->updateTimestamp();
-            $this->uptdateRenewCount();
 
             $wpdb->insert($wpdb->base_prefix . 'cextoo', [
                 'external_id' => $this->getExternalId(),
                 'product_name' => $this->getProductName(),
                 'status' => $this->getStatus(),
-                'renew_count' => $this->getRenewCount(),
                 'renew_at' => $this->getRenewAt(),
                 'start_at' => $this->getStartAt(),
                 'expires_at' => $this->getExpiresAt(),
                 'user_id' => $this->getUserID(),
+                'rule_name' => $this->getRuleName(),
+                'rule_slug' => $this->getRuleSlug(),
                 'created_at' => $this->getCreatedAt(),
                 'updated_at' => $this->getUpdatedAt()
             ]);
@@ -134,7 +111,7 @@ class Cextoo_Database
         $sql = "SELECT * FROM `{$wpdb->base_prefix}cextoo`
                 WHERE user_id = {$this->getUserId()} 
                 AND external_id != {$this->getExternalId()} 
-                AND product_name = {$this->getProductName()}
+                AND rule_slug = {$this->getRuleSlug()}
                 AND status = 1";
 
         $database_result = $wpdb->get_results($sql);
@@ -154,7 +131,7 @@ class Cextoo_Database
     {
         global $wpdb;
 
-        $sql = "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE renew_at = DATE_ADD(CURDATE(), INTERVAL {$days} DAY) AND STATUS = 1";
+        $sql = "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE renew_at IS NOT NULL AND renew_at = DATE_ADD(CURDATE(), INTERVAL {$days} DAY) AND STATUS = 1";
         $database_result = $wpdb->get_results($sql);
         if ($database_result) {
             foreach ($database_result as $subscription) {
@@ -167,12 +144,12 @@ class Cextoo_Database
 
                 if ($days == 1) {
                     $template = 'cextoo-renew-email-1-day.php';
-                    $subject = 'Sua Renovação ' . $subscriptionObject->getProductName() . ' precisa ser amanhã';
+                    $subject = 'Sua Renovação ' . $subscriptionObject->getRuleName() . ' precisa ser amanhã';
                 }
 
                 if ($days == 0) {
                     $template = 'cextoo-renew-email-last-day.php';
-                    $subject = 'Hoje é o último dia para renovar sua Assinatura' . $subscriptionObject->getProductName();
+                    $subject = 'Hoje é o último dia para renovar sua Assinatura' . $subscriptionObject->getRuleName();
                 }
 
                 if (isset($template) && isset($subject)) {
@@ -194,45 +171,12 @@ class Cextoo_Database
         }
     }
 
-    private function massRemoveRoles(WP_User $user)
-
-    {
-        global $wp_roles;
-        foreach ($wp_roles->get_names() as $role => $name) {
-            $user->remove_role($role);
-        }
-    }
-
-    public function desactiveAnomalyUsers()
-    {
-        global $wpdb;
-        $customersIds = $wpdb->get_results(
-            "SELECT DISTINCT(user_id) FROM `{$wpdb->base_prefix}cextoo`"
-        );
-
-        #TODO em pleno ano de 2022, ano da tecnologia não dá para fazer mais isso não...
-        $customersIds = array_column(
-            json_decode(json_encode($customersIds), true),
-            "user_id"
-        );
-
-        $anomalyUsers = get_users([
-            "role__not_in" => ['editor', 'administrator'],
-            "exclude" => $customersIds,
-        ]);
-
-        /** @var WP_User $user */
-        foreach ($anomalyUsers as $user) {
-            $this->massRemoveRoles($user);
-        }
-    }
-
     public function desactiveExpiredSubscriptions()
     {
         global $wpdb;
 
         $database_result = $wpdb->get_results(
-            "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE renew_at < DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND STATUS = 1"
+            "SELECT * FROM `{$wpdb->base_prefix}cextoo` WHERE renew_at IS NOT NULL AND renew_at < DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND STATUS = 1"
         );
 
         if ($database_result) {
@@ -245,7 +189,7 @@ class Cextoo_Database
                 if (!$subscriptionObject->haveOtherActiveSubscription()) {
                     $user = get_user_by('id', $subscriptionObject->getUserId());
                     if ($user) {
-                        $user->remove_role($this->slugify($subscriptionObject->getProductName()));
+                        $user->remove_role($subscriptionObject->getRuleSlug());
                     }
                 }
                 $subscriptionObject->unsetAllAtributes();
@@ -253,34 +197,20 @@ class Cextoo_Database
         }
     }
 
-    private function slugify($text, string $divider = '-')
-    {
-        $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-        $text = preg_replace('~[^-\w]+~', '', $text);
-        $text = trim($text, $divider);
-        $text = preg_replace('~-+~', $divider, $text);
-        $text = strtolower($text);
-
-        if (empty($text)) {
-            return 'n-a';
-        }
-        return $text;
-    }
-
     private function unsetAllAtributes()
     {
-        $this->ID = 0;
-        $this->external_id = '';
-        $this->product_name = '';
+        $this->ID = null;
+        $this->external_id = null;
+        $this->product_name = null;
         $this->status = 0;
-        $this->renew_count = 0;
-        $this->renew_at = '';
-        $this->start_at = '';
-        $this->expires_at = '';
-        $this->user_id = 0;
-        $this->created_at = '';
-        $this->updated_at = '';
+        $this->renew_at = null;
+        $this->start_at = null;
+        $this->expires_at = null;
+        $this->user_id = null;
+        $this->rule_name = null;
+        $this->rule_slug = null;
+        $this->created_at = null;
+        $this->updated_at = null;
     }
 
     private function updateTimestamp()
@@ -326,6 +256,38 @@ class Cextoo_Database
     /**
      * @return string
      */
+    public function getRuleName(): string
+    {
+        return $this->rule_name;
+    }
+
+    /**
+     * @param string $rule_name
+     */
+    public function setRuleName(string $rule_name): void
+    {
+        $this->rule_name = $rule_name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRuleSlug(): string
+    {
+        return $this->rule_slug;
+    }
+
+    /**
+     * @param string $rule_slug
+     */
+    public function setRuleSlug(string $rule_slug): void
+    {
+        $this->rule_slug = $rule_slug;
+    }
+
+    /**
+     * @return string
+     */
     public function getProductName(): string
     {
         return $this->product_name;
@@ -353,22 +315,6 @@ class Cextoo_Database
     public function setStatus(int $status): void
     {
         $this->status = $status;
-    }
-
-    /**
-     * @return int
-     */
-    public function getRenewCount(): int
-    {
-        return $this->renew_count;
-    }
-
-    /**
-     * @param int $renew_count
-     */
-    public function setRenewCount(int $renew_count): void
-    {
-        $this->renew_count = $renew_count;
     }
 
     /**
@@ -436,14 +382,6 @@ class Cextoo_Database
         return $this->user_id;
     }
 
-    private function setUserEmail(string $user_email): void
-    {
-        $user = get_user_by('email', $user_email);
-        if ($user) {
-            $this->setUserId($user->ID);
-        }
-    }
-
     /**
      * @param $param
      */
@@ -480,11 +418,12 @@ class Cextoo_Database
 			external_id varchar(250) NOT NULL,
 			product_name varchar(250) NOT NULL,
 			status int(11) NOT NULL default '0',
-			renew_count int(11) NOT NULL default '0',
 			renew_at datetime NULL,
 			start_at datetime NOT NULL,
 			expires_at datetime NULL,
 			user_id bigint(20) UNSIGNED NOT NULL,
+            rule_name varchar(250) NOT NULL,
+            rule_slug varchar(250) NOT NULL,
 			created_at datetime NOT NULL,
 			updated_at datetime NOT NULL,
 			PRIMARY KEY  (ID)
