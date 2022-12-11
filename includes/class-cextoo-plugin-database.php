@@ -65,10 +65,11 @@ class Cextoo_Database
         } else {
             global $wpdb;
             $this->updateTimestamp();
+            $status = $this->getRenewAt() ? $this->getStatus() : 1;
             $wpdb->update(
                 $wpdb->base_prefix . 'cextoo',
                 [
-                    'status' => $this->getStatus(),
+                    'status' => $status,
                     'renew_at' => $this->getRenewAt(),
                     'expires_at' => $this->getExpiresAt(),
                     'updated_at' => $this->getUpdatedAt()
