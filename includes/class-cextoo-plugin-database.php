@@ -111,7 +111,7 @@ class Cextoo_Database
         $sql = "SELECT * FROM `{$wpdb->base_prefix}cextoo`
                 WHERE user_id = {$this->getUserId()} 
                 AND external_id != {$this->getExternalId()} 
-                AND rule_slug = {$this->getRuleSlug()}
+                AND rule_slug = '{$this->getRuleSlug()}'
                 AND status = 1";
 
         $database_result = $wpdb->get_results($sql);
@@ -222,9 +222,9 @@ class Cextoo_Database
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getID(): int
+    public function getID(): ?int
     {
         return $this->ID;
     }
@@ -238,9 +238,9 @@ class Cextoo_Database
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getExternalId(): string
+    public function getExternalId(): ?string
     {
         return $this->external_id;
     }
@@ -254,9 +254,9 @@ class Cextoo_Database
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRuleName(): string
+    public function getRuleName(): ?string
     {
         return $this->rule_name;
     }
@@ -270,9 +270,9 @@ class Cextoo_Database
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRuleSlug(): string
+    public function getRuleSlug(): ?string
     {
         return $this->rule_slug;
     }
@@ -286,9 +286,9 @@ class Cextoo_Database
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getProductName(): string
+    public function getProductName(): ?string
     {
         return $this->product_name;
     }
@@ -318,9 +318,9 @@ class Cextoo_Database
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRenewAt()
+    public function getRenewAt(): ?string
     {
         return $this->renew_at;
     }
@@ -337,9 +337,9 @@ class Cextoo_Database
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getStartAt()
+    public function getStartAt(): ?string
     {
         return $this->start_at;
     }
@@ -356,9 +356,9 @@ class Cextoo_Database
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getExpiresAt()
+    public function getExpiresAt(): ?string
     {
         return $this->expires_at;
     }
@@ -375,9 +375,9 @@ class Cextoo_Database
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getUserId(): int
+    public function getUserId(): ?int
     {
         return $this->user_id;
     }
@@ -391,17 +391,30 @@ class Cextoo_Database
     }
 
     /**
-     * @return string
+     * Set User ID by email address
+     * @param string $user_email
+     * @return void
      */
-    public function getCreatedAt()
+    private function setUserEmail(string $user_email): void
+    {
+        $user = get_user_by('email', $user_email);
+        if ($user) {
+            $this->setUserId($user->ID);
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCreatedAt(): ?string
     {
         return $this->created_at;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): ?string
     {
         return $this->updated_at;
     }

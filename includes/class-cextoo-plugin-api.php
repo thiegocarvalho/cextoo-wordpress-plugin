@@ -13,11 +13,11 @@ class Cextoo_API
         if (!$user_id) {
             $user_id =  wp_insert_user($user_data);
             $this->send_notification_wellcome_email($user_data, $user_id);
-            return true;
-        } else {
-            $this->add_customer_role($user_data);
         }
-        return false;
+        if ($data['status'] == 1) {
+            $this->add_customer_role($data);
+        }
+        return $user_id;
     }
 
     public function remove_customer($data): bool
@@ -73,12 +73,10 @@ class Cextoo_API
 
     private function format_wp_user($data, $password)
     {
-        $role = $this->find_or_create_role($data['body']['rule_name'], $data['body']['rule_slug']);
         return [
             'user_pass' =>  $password,
             'user_login' => $data['user_email'],
-            'user_email' => $data['user_email'],
-            'role' => $role
+            'user_email' => $data['user_email']
         ];
     }
 
@@ -94,7 +92,7 @@ class Cextoo_API
     {
         $user = get_user_by('email', $data['user_email']);
         if ($user) {
-            $user->add_role($this->find_or_create_role($data['body']['rule_name'], $data['body']['rule_slug']));
+            $user->add_role($this->find_or_create_role($data['rule_name'], $data['rule_slug']));
             return true;
         }
         return false;
@@ -104,7 +102,7 @@ class Cextoo_API
     {
         $user = get_user_by('email', $data['user_email']);
         if ($user) {
-            $user->remove_role($this->find_or_create_role($data['body']['rule_name'], $data['body']['rule_slug']));
+            $user->remove_role($this->find_or_create_role($data['rule_name'], $data['rule_slug']));
             return true;
         }
         return false;
@@ -117,6 +115,7 @@ class Cextoo_API
 
     private function subscription_handler($data)
     {
+        $this->create_customer($data);
         $database = new Cextoo_Database();
         if ($database->get($data['external_id'])) {
             $database->set($data);
@@ -126,12 +125,8 @@ class Cextoo_API
             $database->create();
         }
 
-        if ($data['status'] == 1) {
-            $this->add_customer_role($data);
-        } else {
-            if (!$database->haveOtherActiveSubscription()) {
-                $this->remove_customer_role($data);
-            }
+        if ($data['status'] == 0 && !$database->haveOtherActiveSubscription()) {
+            $this->remove_customer_role($data);
         }
     }
 
