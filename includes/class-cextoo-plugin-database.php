@@ -70,7 +70,10 @@ class Cextoo_Database
                 $wpdb->base_prefix . 'cextoo',
                 [
                     'status' => $status,
+                    'product_name' => $this->getProductName(),
                     'renew_at' => $this->getRenewAt(),
+                    'rule_name' => $this->getRuleName(),
+                    'rule_slug' => $this->getRuleSlug(),
                     'expires_at' => $this->getExpiresAt(),
                     'updated_at' => $this->getUpdatedAt()
                 ],
