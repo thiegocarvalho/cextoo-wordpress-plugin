@@ -120,12 +120,12 @@
                                                         width="100%">
                                                         <tr>
                                                             <td class="pad"
-                                                                style="padding-bottom:10px;width:100%;padding-right:0px;padding-left:0px;">
+                                                                style="width:100%;padding-right:0px;padding-left:0px;">
                                                                 <div align="center" class="alignment"
                                                                     style="line-height:10px"><img alt="Defiverso"
-                                                                        src="<?php echo plugin_dir_url('cextoo-wordpress-plugin/public/images/email') . 'email/'; ?>logo-site-final.png"
-                                                                        style="display: block; height: auto; border: 0; width: 200px; max-width: 100%;"
-                                                                        title="Defiverso" width="200" /></div>
+                                                                        src="<?php echo plugin_dir_url('cextoo-wordpress-plugin/public/images/email') . 'email/'; ?>fundo-p-email.png"
+                                                                        style="display: block; height: auto; border: 0; width: 500px; max-width: 100%;"
+                                                                        title="Defiverso" width="500" /></div>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -174,8 +174,7 @@
                                                                 <div style="font-family: Tahoma, Verdana, sans-serif">
                                                                     <div class="txtTinyMce-wrapper"
                                                                         style="font-size: 12px; font-family: Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 18px; color: #393d47; line-height: 1.5;">
-                                                                        <p
-                                                                            style=" font-size: 14px; text-align: left;">
+                                                                        <p style=" font-size: 14px; text-align: left;">
                                                                             Agora podemos dizer que você acabou de
                                                                             entrar no Universo das Finanças
                                                                             Descentralizadas, portanto você agora é
@@ -183,8 +182,7 @@
                                                                         <p
                                                                             style=" font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
                                                                         </p>
-                                                                        <p
-                                                                            style=" font-size: 14px; text-align: left;">
+                                                                        <p style=" font-size: 14px; text-align: left;">
                                                                             Quem são os Defizeros? Pessoas que estão
                                                                             dentro do Defiverso e são viciadas em Defi,
                                                                             sempre buscando aprender cada dia mais.
@@ -195,8 +193,7 @@
                                                                         <p
                                                                             style=" font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
                                                                         </p>
-                                                                        <p
-                                                                            style=" font-size: 14px; text-align: left;">
+                                                                        <p style=" font-size: 14px; text-align: left;">
                                                                             Ser um Defizero significa que você
                                                                             compartilha da visão de longo prazo próspera
                                                                             para as finanças descentralizadas e não
@@ -206,8 +203,7 @@
                                                                         <p
                                                                             style=" font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
                                                                         </p>
-                                                                        <p
-                                                                            style=" font-size: 14px; text-align: left;">
+                                                                        <p style=" font-size: 14px; text-align: left;">
                                                                             Ao se tornar um Defizero, você
                                                                             automaticamente se torna membro de um grupo
                                                                             seleto de pessoas que recebem conteúdos e
@@ -220,8 +216,7 @@
                                                                         <p
                                                                             style=" font-size: 14px; text-align: left; mso-line-height-alt: 18px;">
                                                                         </p>
-                                                                        <p
-                                                                            style=" font-size: 14px; text-align: left;">
+                                                                        <p style=" font-size: 14px; text-align: left;">
                                                                             Esteja preparado para aprender sobre
                                                                             criptomoedas, NFTs e Metaverso de uma forma
                                                                             diferente e didática. A partir de agora você
@@ -244,14 +239,13 @@
                                                         width="100%">
                                                         <tr>
                                                             <td class="pad">
-                                                                <div
-                                                                    style="color:#000000;font-size:14px;font-family:Arial, Helvetica Neue, Helvetica, sans-serif;font-weight:400;line-height:120%;text-align:left;direction:ltr;letter-spacing:0px;mso-line-height-alt:16.8px;">
-                                                                    <p style=" margin-bottom: 16px;">Você
+                                                                <div style="font-family: Tahoma, Verdana, sans-serif">
+                                                                    <p style=" margin-bottom: 14px;">Você
                                                                         acabou de dar o passo mais importante para
                                                                         prosperar junto com a evolução do mercado,
                                                                         obrigado pela confiança e por nos escolher como
                                                                         guia nessa sua jornada.</p>
-                                                                    <p style=" margin-bottom: 16px;">A partir
+                                                                    <p style=" margin-bottom: 14px;">A partir
                                                                         de agora, estamos dispostos para receber
                                                                         qualquer dúvida em relação a plataforma e
                                                                         possíveis erros, basta enviar um e-mail para
@@ -293,8 +287,7 @@
                                                                 <div style="font-family: Tahoma, Verdana, sans-serif">
                                                                     <div class="txtTinyMce-wrapper"
                                                                         style="font-size: 12px; font-family: Tahoma, Verdana, Segoe, sans-serif; text-align: center; mso-line-height-alt: 18px; color: #393d47; line-height: 1.5;">
-                                                                        <p
-                                                                            style=" mso-line-height-alt: 19.5px;">
+                                                                        <p style=" mso-line-height-alt: 19.5px;">
                                                                         </p>
                                                                     </div>
                                                                 </div>
