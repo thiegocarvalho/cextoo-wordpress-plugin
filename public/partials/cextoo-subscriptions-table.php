@@ -112,7 +112,8 @@
                 $button = [
                     'text' => "Renovar",
                     'class' => 'cextoo-button bg-success',
-                    'action' => 'https://carrinho.defiverso.com/subscription/' . $subscription->external_id
+                    // 'action' => 'https://cart.defiverso.com/subscription/' . $subscription->external_id
+                    'action' => 'https://defiverso.com'
                 ];
             } else {
                 $status = 'border-left-color: #90EE90;';
