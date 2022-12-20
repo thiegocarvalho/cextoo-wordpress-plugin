@@ -5,7 +5,7 @@
 <style>
 .cextoo-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 4fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 4fr));
     grid-auto-rows: auto;
     object-fit: cover;
     grid-gap: .5rem;
@@ -112,7 +112,7 @@
                 $button = [
                     'text' => "Renovar",
                     'class' => 'cextoo-button bg-success',
-                    'action' => 'https://carrinho.defiverso.com/subscription/' . $subscription->external_id
+                    'action' => 'https://cart.defiverso.com/subscription/' . $subscription->external_id
                 ];
             } else {
                 $status = 'border-left-color: #90EE90;';
