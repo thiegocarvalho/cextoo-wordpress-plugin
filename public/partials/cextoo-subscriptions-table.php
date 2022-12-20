@@ -5,7 +5,7 @@
 <style>
 .cextoo-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 4fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 4fr));
     grid-auto-rows: auto;
     object-fit: cover;
     grid-gap: .5rem;
